@@ -34,5 +34,23 @@ class Game(unittest.TestCase):
     self.assertFalse(tennis.Game(2, 4).winner())
     self.assertFalse(tennis.Game(3, 5).winner())
 
+  def test_point(self):
+    with self.assertRaises(
+      RuntimeError,
+      msg='Cannot advance this game\'s score because the game is over.'
+    ):
+      tennis.Game(4, 0).point(True)
+
+    game = tennis.Game(0, 0)
+    self.assertIsNone(game.point(True))
+    self.assertEqual(game.server_points, 1)
+    self.assertEqual(game.returner_points, 0)
+    self.assertIsNone(game.point(False))
+    self.assertEqual(game.server_points, 1)
+    self.assertEqual(game.returner_points, 1)
+
+    self.assertTrue(tennis.Game(3, 0).point(True))
+    self.assertFalse(tennis.Game(0, 3).point(False))
+
 if __name__ == '__main__':
   unittest.main()

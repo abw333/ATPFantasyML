@@ -21,3 +21,22 @@ class Game:
 
     if self.returner_points >= 4 and self.returner_points - self.server_points >= 2:
       return False
+
+  '''
+  Advances the game's score by a point.
+
+  :param bool server: True if the server won the point, and False otherwise
+  :return: True if the server won the game, False if the returner won the game, and None
+           otherwise
+  :raises RuntimeError: if the game's score cannot be advanced because the game is over
+  '''
+  def point(self, server):
+    if self.winner() is not None:
+      raise RuntimeError('Cannot advance this game\'s score because the game is over.')
+
+    if server:
+      self.server_points += 1
+    else:
+      self.returner_points += 1
+
+    return self.winner()
