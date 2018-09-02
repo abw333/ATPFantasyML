@@ -24,3 +24,25 @@ class Tiebreak:
     if self.first_returner_points >= 7:
       if self.first_returner_points - self.first_server_points >= 2:
         return False
+
+  '''
+  Advances the tiebreak's score by a point.
+
+  :param bool first_server: True if the first server won the point, and False otherwise
+  :return: True if the first server won the tiebreak, False if the first returner won
+           the tiebreak, and None otherwise
+  :raises RuntimeError: if the tiebreak's score cannot be advanced because the tiebreak
+                        is over
+  '''
+  def point(self, first_server):
+    if self.winner() is not None:
+      raise RuntimeError(
+        'Cannot advance this tiebreak\'s score because the tiebreak is over.'
+      )
+
+    if first_server:
+      self.first_server_points += 1
+    else:
+      self.first_returner_points += 1
+
+    return self.winner()

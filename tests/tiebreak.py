@@ -34,5 +34,23 @@ class Tiebreak(unittest.TestCase):
     self.assertFalse(tennis.Tiebreak(5, 7).winner())
     self.assertFalse(tennis.Tiebreak(6, 8).winner())
 
+  def test_point(self):
+    with self.assertRaises(
+      RuntimeError,
+      msg='Cannot advance this tiebreak\'s score because the tiebreak is over.'
+    ):
+      tennis.Tiebreak(7, 0).point(True)
+
+    tiebreak = tennis.Tiebreak(0, 0)
+    self.assertIsNone(tiebreak.point(True))
+    self.assertEqual(tiebreak.first_server_points, 1)
+    self.assertEqual(tiebreak.first_returner_points, 0)
+    self.assertIsNone(tiebreak.point(False))
+    self.assertEqual(tiebreak.first_server_points, 1)
+    self.assertEqual(tiebreak.first_returner_points, 1)
+
+    self.assertTrue(tennis.Tiebreak(6, 0).point(True))
+    self.assertFalse(tennis.Tiebreak(0, 6).point(False))
+
 if __name__ == '__main__':
   unittest.main()
