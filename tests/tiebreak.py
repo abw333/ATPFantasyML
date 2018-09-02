@@ -21,5 +21,18 @@ class Tiebreak(unittest.TestCase):
     self.assertEqual(tiebreak.first_server_points, 3)
     self.assertEqual(tiebreak.first_returner_points, 4)
 
+  def test_winner(self):
+    self.assertIsNone(tennis.Tiebreak(0, 0).winner())
+    self.assertIsNone(tennis.Tiebreak(7, 6).winner())
+    self.assertIsNone(tennis.Tiebreak(6, 7).winner())
+
+    self.assertTrue(tennis.Tiebreak(7, 0).winner())
+    self.assertTrue(tennis.Tiebreak(7, 5).winner())
+    self.assertTrue(tennis.Tiebreak(8, 6).winner())
+
+    self.assertFalse(tennis.Tiebreak(0, 7).winner())
+    self.assertFalse(tennis.Tiebreak(5, 7).winner())
+    self.assertFalse(tennis.Tiebreak(6, 8).winner())
+
 if __name__ == '__main__':
   unittest.main()

@@ -11,3 +11,16 @@ class Tiebreak:
   def __init__(self, first_server_points=0, first_returner_points=0):
     self.first_server_points = first_server_points
     self.first_returner_points = first_returner_points
+
+  '''
+  :return: True if the server won the tiebreak, False if the returner won the tiebreak,
+           and None otherwise
+  '''
+  def winner(self):
+    if self.first_server_points >= 7:
+      if self.first_server_points - self.first_returner_points >= 2:
+        return True
+
+    if self.first_returner_points >= 7:
+      if self.first_returner_points - self.first_server_points >= 2:
+        return False
