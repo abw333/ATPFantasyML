@@ -10,3 +10,14 @@ class Game:
   def __init__(self, server_points=0, returner_points=0):
     self.server_points = server_points
     self.returner_points = returner_points
+
+  '''
+  :return: True if the server won the game, False if the returner won the game, and None
+           otherwise
+  '''
+  def winner(self):
+    if self.server_points >= 4 and self.server_points - self.returner_points >= 2:
+      return True
+
+    if self.returner_points >= 4 and self.returner_points - self.server_points >= 2:
+      return False

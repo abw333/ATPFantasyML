@@ -21,5 +21,18 @@ class Game(unittest.TestCase):
     self.assertEqual(game.server_points, 3)
     self.assertEqual(game.returner_points, 4)
 
+  def test_winner(self):
+    self.assertIsNone(tennis.Game(0, 0).winner())
+    self.assertIsNone(tennis.Game(4, 3).winner())
+    self.assertIsNone(tennis.Game(3, 4).winner())
+
+    self.assertTrue(tennis.Game(4, 0).winner())
+    self.assertTrue(tennis.Game(4, 2).winner())
+    self.assertTrue(tennis.Game(5, 3).winner())
+
+    self.assertFalse(tennis.Game(0, 4).winner())
+    self.assertFalse(tennis.Game(2, 4).winner())
+    self.assertFalse(tennis.Game(3, 5).winner())
+
 if __name__ == '__main__':
   unittest.main()
