@@ -46,3 +46,13 @@ class Tiebreak:
       self.first_returner_points += 1
 
     return self.winner()
+
+  '''
+  :return: a string representation of the tiebreak
+  '''
+  def __str__(self):
+    return '{}(first_server_points={}, first_returner_points={})'.format(
+      type(self).__name__,
+      self.first_server_points,
+      self.first_returner_points
+    )
