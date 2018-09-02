@@ -52,5 +52,8 @@ class Game(unittest.TestCase):
     self.assertTrue(tennis.Game(3, 0).point(True))
     self.assertFalse(tennis.Game(0, 3).point(False))
 
+  def test_str(self):
+    self.assertEqual(str(tennis.Game(1, 2)), 'Game(server_points=1, returner_points=2)')
+
 if __name__ == '__main__':
   unittest.main()

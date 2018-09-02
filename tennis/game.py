@@ -40,3 +40,13 @@ class Game:
       self.returner_points += 1
 
     return self.winner()
+
+  '''
+  :return: a string representation of the game
+  '''
+  def __str__(self):
+    return '{}(server_points={}, returner_points={})'.format(
+      type(self).__name__,
+      self.server_points,
+      self.returner_points
+    )
