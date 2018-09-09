@@ -55,6 +55,9 @@ class Game(unittest.TestCase):
   def test_str(self):
     self.assertEqual(str(tennis.Game(1, 2)), 'Game(server_points=1, returner_points=2)')
 
+  def test_repr(self):
+    self.assertEqual(repr(tennis.Game(1, 2)), 'Game(server_points=1, returner_points=2)')
+
   def test_eq(self):
     self.assertEqual(tennis.Game(1, 2), tennis.Game(1, 2))
     self.assertNotEqual(tennis.Game(1, 2), tennis.Game(2, 1))

@@ -52,6 +52,12 @@ class Game:
     )
 
   '''
+  :return: a string representation of the game
+  '''
+  def __repr__(self):
+    return str(self)
+
+  '''
   :param object other: object to compare to the game
   :return: True if the input object is equal to the game, and False otherwise
   '''
