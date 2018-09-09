@@ -21,5 +21,147 @@ class Set(unittest.TestCase):
     self.assertEqual(zet.games, [tennis.Game(3, 4)])
     self.assertEqual(zet.tiebreak, False)
 
+  def test_first_server_games(self):
+    self.assertEqual(tennis.Set([]).first_server_games(), 0)
+
+    self.assertEqual(tennis.Set().first_server_games(), 0)
+    self.assertEqual(tennis.Set([tennis.Game(0, 4)]).first_server_games(), 0)
+    self.assertEqual(tennis.Set([tennis.Game(4, 0)]).first_server_games(), 1)
+
+    self.assertEqual(
+      tennis.Set([tennis.Game(0, 4), tennis.Game()]).first_server_games(),
+      0
+    )
+    self.assertEqual(
+      tennis.Set([tennis.Game(0, 4), tennis.Game(0, 4)]).first_server_games(),
+      1
+    )
+    self.assertEqual(
+      tennis.Set([tennis.Game(0, 4), tennis.Game(4, 0)]).first_server_games(),
+      0
+    )
+
+    self.assertEqual(
+      tennis.Set(
+        [tennis.Game(0, 4), tennis.Game(4, 0), tennis.Tiebreak()]
+      ).first_server_games(),
+      0
+    )
+    self.assertEqual(
+      tennis.Set(
+        [tennis.Game(0, 4), tennis.Game(4, 0), tennis.Tiebreak(0, 7)]
+      ).first_server_games(),
+      0
+    )
+    self.assertEqual(
+      tennis.Set(
+        [tennis.Game(0, 4), tennis.Game(4, 0), tennis.Tiebreak(7, 0)]
+      ).first_server_games(),
+      1
+    )
+
+    self.assertEqual(
+      tennis.Set([tennis.Game(4, 0), tennis.Game()]).first_server_games(),
+      1
+    )
+    self.assertEqual(
+      tennis.Set([tennis.Game(4, 0), tennis.Game(0, 4)]).first_server_games(),
+      2
+    )
+    self.assertEqual(
+      tennis.Set([tennis.Game(4, 0), tennis.Game(4, 0)]).first_server_games(),
+      1
+    )
+
+    self.assertEqual(
+      tennis.Set(
+        [tennis.Game(4, 0), tennis.Game(4, 0), tennis.Tiebreak()]
+      ).first_server_games(),
+      1
+    )
+    self.assertEqual(
+      tennis.Set(
+        [tennis.Game(4, 0), tennis.Game(4, 0), tennis.Tiebreak(0, 7)]
+      ).first_server_games(),
+      1
+    )
+    self.assertEqual(
+      tennis.Set(
+        [tennis.Game(4, 0), tennis.Game(4, 0), tennis.Tiebreak(7, 0)]
+      ).first_server_games(),
+      2
+    )
+
+  def test_first_returner_games(self):
+    self.assertEqual(tennis.Set([]).first_returner_games(), 0)
+
+    self.assertEqual(tennis.Set().first_returner_games(), 0)
+    self.assertEqual(tennis.Set([tennis.Game(0, 4)]).first_returner_games(), 1)
+    self.assertEqual(tennis.Set([tennis.Game(4, 0)]).first_returner_games(), 0)
+
+    self.assertEqual(
+      tennis.Set([tennis.Game(0, 4), tennis.Game()]).first_returner_games(),
+      1
+    )
+    self.assertEqual(
+      tennis.Set([tennis.Game(0, 4), tennis.Game(0, 4)]).first_returner_games(),
+      1
+    )
+    self.assertEqual(
+      tennis.Set([tennis.Game(0, 4), tennis.Game(4, 0)]).first_returner_games(),
+      2
+    )
+
+    self.assertEqual(
+      tennis.Set(
+        [tennis.Game(0, 4), tennis.Game(4, 0), tennis.Tiebreak()]
+      ).first_returner_games(),
+      2
+    )
+    self.assertEqual(
+      tennis.Set(
+        [tennis.Game(0, 4), tennis.Game(4, 0), tennis.Tiebreak(0, 7)]
+      ).first_returner_games(),
+      3
+    )
+    self.assertEqual(
+      tennis.Set(
+        [tennis.Game(0, 4), tennis.Game(4, 0), tennis.Tiebreak(7, 0)]
+      ).first_returner_games(),
+      2
+    )
+
+    self.assertEqual(
+      tennis.Set([tennis.Game(4, 0), tennis.Game()]).first_returner_games(),
+      0
+    )
+    self.assertEqual(
+      tennis.Set([tennis.Game(4, 0), tennis.Game(0, 4)]).first_returner_games(),
+      0
+    )
+    self.assertEqual(
+      tennis.Set([tennis.Game(4, 0), tennis.Game(4, 0)]).first_returner_games(),
+      1
+    )
+
+    self.assertEqual(
+      tennis.Set(
+        [tennis.Game(4, 0), tennis.Game(4, 0), tennis.Tiebreak()]
+      ).first_returner_games(),
+      1
+    )
+    self.assertEqual(
+      tennis.Set(
+        [tennis.Game(4, 0), tennis.Game(4, 0), tennis.Tiebreak(0, 7)]
+      ).first_returner_games(),
+      2
+    )
+    self.assertEqual(
+      tennis.Set(
+        [tennis.Game(4, 0), tennis.Game(4, 0), tennis.Tiebreak(7, 0)]
+      ).first_returner_games(),
+      1
+    )
+
 if __name__ == '__main__':
   unittest.main()
