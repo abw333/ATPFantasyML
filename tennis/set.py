@@ -25,3 +25,22 @@ class Set:
   '''
   def first_returner_games(self):
     return len([i for i, g in enumerate(self.games) if (i % 2 == 1) == g.winner()])
+
+  '''
+  :return: True if the first server won the set, False if the first returner won the
+           set, and None otherwise
+  '''
+  def winner(self):
+    first_server_games = self.first_server_games()
+    if self.tiebreak and first_server_games == 7:
+      return True
+
+    first_returner_games = self.first_returner_games()
+    if self.tiebreak and first_returner_games == 7:
+      return False
+
+    if first_server_games >= 6 and first_server_games - first_returner_games >= 2:
+      return True
+
+    if first_returner_games >= 6 and first_returner_games - first_server_games >= 2:
+      return False

@@ -163,5 +163,30 @@ class Set(unittest.TestCase):
       1
     )
 
+  def test_winner(self):
+    self.assertIsNone(tennis.Set([tennis.Game(4, 0)] * 12 + [tennis.Tiebreak()]).winner())
+
+    self.assertTrue(tennis.Set([tennis.Game(4, 0)] * 12 + [tennis.Tiebreak(7, 0)]).winner())
+
+    self.assertFalse(tennis.Set([tennis.Game(4, 0)] * 12 + [tennis.Tiebreak(0, 7)]).winner())
+
+    self.assertIsNone(tennis.Set([tennis.Game(4, 0)] * 10 + [tennis.Game()], False).winner())
+
+    self.assertIsNone(tennis.Set([tennis.Game(4, 0)] * 11 + [tennis.Game()], False).winner())
+
+    self.assertIsNone(tennis.Set([tennis.Game(4, 0)] * 12 + [tennis.Game()], False).winner())
+
+    self.assertIsNone(tennis.Set([tennis.Game(4, 0)] * 13 + [tennis.Game()], False).winner())
+
+    self.assertTrue(tennis.Set([tennis.Game(4, 0)] * 13 + [tennis.Game(0, 4)], False).winner())
+
+    self.assertIsNone(
+      tennis.Set([tennis.Game(4, 0)] * 12 + [tennis.Game(0, 4), tennis.Game()], False).winner()
+    )
+
+    self.assertFalse(
+      tennis.Set([tennis.Game(4, 0)] * 12 + [tennis.Game(0, 4), tennis.Game(4, 0)], False).winner()
+    )
+
 if __name__ == '__main__':
   unittest.main()
