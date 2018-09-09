@@ -50,3 +50,10 @@ class Game:
       self.server_points,
       self.returner_points
     )
+
+  '''
+  :param object other: object to compare to the game
+  :return: True if the input object is equal to the game, and False otherwise
+  '''
+  def __eq__(self, other):
+    return isinstance(other, type(self)) and self.__dict__ == other.__dict__
