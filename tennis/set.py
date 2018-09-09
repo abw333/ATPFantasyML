@@ -46,6 +46,16 @@ class Set:
       return False
 
   '''
+  :return: a string representation of the set
+  '''
+  def __str__(self):
+    return '{}(games={}, tiebreak={})'.format(
+      type(self).__name__,
+      self.games,
+      self.tiebreak
+    )
+
+  '''
   :param object other: object to compare to the set
   :return: True if the input object is equal to the set, and False otherwise
   '''
