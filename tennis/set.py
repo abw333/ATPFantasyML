@@ -44,3 +44,10 @@ class Set:
 
     if first_returner_games >= 6 and first_returner_games - first_server_games >= 2:
       return False
+
+  '''
+  :param object other: object to compare to the set
+  :return: True if the input object is equal to the set, and False otherwise
+  '''
+  def __eq__(self, other):
+    return isinstance(other, type(self)) and self.__dict__ == other.__dict__

@@ -188,5 +188,14 @@ class Set(unittest.TestCase):
       tennis.Set([tennis.Game(4, 0)] * 12 + [tennis.Game(0, 4), tennis.Game(4, 0)], False).winner()
     )
 
+  def test_eq(self):
+    self.assertEqual(tennis.Set([], True), tennis.Set([], True))
+    self.assertEqual(
+      tennis.Set([tennis.Game(1, 2)], False),
+      tennis.Set([tennis.Game(1, 2)], False)
+    )
+    self.assertNotEqual(tennis.Set([], True), tennis.Set([], False))
+    self.assertNotEqual(tennis.Set([], True), tennis.Set([tennis.Game(1, 2)], True))
+
 if __name__ == '__main__':
   unittest.main()
