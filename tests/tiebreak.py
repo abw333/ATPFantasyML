@@ -58,5 +58,11 @@ class Tiebreak(unittest.TestCase):
       'Tiebreak(first_server_points=1, first_returner_points=2)'
     )
 
+  def test_repr(self):
+    self.assertEqual(
+      repr(tennis.Tiebreak(1, 2)),
+      'Tiebreak(first_server_points=1, first_returner_points=2)'
+    )
+
 if __name__ == '__main__':
   unittest.main()

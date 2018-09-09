@@ -56,3 +56,9 @@ class Tiebreak:
       self.first_server_points,
       self.first_returner_points
     )
+
+  '''
+  :return: a string representation of the tiebreak
+  '''
+  def __repr__(self):
+    return str(self)
