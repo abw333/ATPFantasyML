@@ -56,6 +56,12 @@ class Set:
     )
 
   '''
+  :return: a string representation of the set
+  '''
+  def __repr__(self):
+    return str(self)
+
+  '''
   :param object other: object to compare to the set
   :return: True if the input object is equal to the set, and False otherwise
   '''

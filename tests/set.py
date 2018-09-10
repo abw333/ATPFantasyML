@@ -199,6 +199,17 @@ class Set(unittest.TestCase):
       'Set(games=[Game(server_points=1, returner_points=2), Tiebreak(first_server_points=3, first_returner_points=4)], tiebreak=True)'
     )
 
+  def test_repr(self):
+    self.assertEqual(repr(tennis.Set([], True)), 'Set(games=[], tiebreak=True)')
+    self.assertEqual(
+      repr(tennis.Set([tennis.Game(1, 2)], False)),
+      'Set(games=[Game(server_points=1, returner_points=2)], tiebreak=False)'
+    )
+    self.assertEqual(
+      repr(tennis.Set([tennis.Game(1, 2), tennis.Tiebreak(3, 4)], True)),
+      'Set(games=[Game(server_points=1, returner_points=2), Tiebreak(first_server_points=3, first_returner_points=4)], tiebreak=True)'
+    )
+
   def test_eq(self):
     self.assertEqual(tennis.Set([], True), tennis.Set([], True))
     self.assertEqual(
