@@ -46,6 +46,31 @@ class Set:
       return False
 
   '''
+  Advances the set's score by a point.
+
+  :param bool first_server: True if the first server won the point, and False otherwise
+  :return: True if the first server won the set, False if the first returner won the
+           set, and None otherwise
+  :raises RuntimeError: if the set's score cannot be advanced because the set is over
+  '''
+  def point(self, first_server):
+    if self.winner() is not None:
+      raise RuntimeError('Cannot advance this set\'s score because the set is over.')
+
+    game_winner = self.games[-1].point((len(self.games) % 2 == 1) == first_server)
+    if game_winner is None:
+      return None
+
+    set_winner = self.winner()
+    if set_winner is not None:
+      return set_winner
+
+    if self.tiebreak and len(self.games) == 12:
+      self.games.append(tennis.Tiebreak(first_server_points=0, first_returner_points=0))
+    else:
+      self.games.append(tennis.Game(server_points=0, returner_points=0))
+
+  '''
   :return: a string representation of the set
   '''
   def __str__(self):
