@@ -39,29 +39,44 @@ class Tiebreak(unittest.TestCase):
       RuntimeError,
       msg='Cannot advance this tiebreak\'s score because the tiebreak is over.'
     ):
-      tennis.Tiebreak(7, 0).point(True)
+      tennis.Tiebreak(3, 1, 3).point(True)
 
-    tiebreak = tennis.Tiebreak(0, 0)
+    tiebreak = tennis.Tiebreak()
     self.assertIsNone(tiebreak.point(True))
-    self.assertEqual(tiebreak.first_server_points, 1)
-    self.assertEqual(tiebreak.first_returner_points, 0)
+    self.assertEqual(tiebreak, tennis.Tiebreak(1, 0))
     self.assertIsNone(tiebreak.point(False))
-    self.assertEqual(tiebreak.first_server_points, 1)
-    self.assertEqual(tiebreak.first_returner_points, 1)
+    self.assertEqual(tiebreak, tennis.Tiebreak(1, 1))
+    self.assertIsNone(tiebreak.point(True))
+    self.assertEqual(tiebreak, tennis.Tiebreak(2, 1))
+    self.assertIsNone(tiebreak.point(True))
+    self.assertEqual(tiebreak, tennis.Tiebreak(3, 1))
+    self.assertIsNone(tiebreak.point(True))
+    self.assertEqual(tiebreak, tennis.Tiebreak(4, 1))
+    self.assertIsNone(tiebreak.point(True))
+    self.assertEqual(tiebreak, tennis.Tiebreak(5, 1))
+    self.assertIsNone(tiebreak.point(True))
+    self.assertEqual(tiebreak, tennis.Tiebreak(6, 1))
+    self.assertTrue(tiebreak.point(True))
+    self.assertEqual(tiebreak, tennis.Tiebreak(7, 1))
 
-    self.assertTrue(tennis.Tiebreak(6, 0).point(True))
-    self.assertFalse(tennis.Tiebreak(0, 6).point(False))
+    tiebreak = tennis.Tiebreak(0, 1, 3)
+    self.assertIsNone(tiebreak.point(True))
+    self.assertEqual(tiebreak, tennis.Tiebreak(1, 1, 3))
+    self.assertIsNone(tiebreak.point(False))
+    self.assertEqual(tiebreak, tennis.Tiebreak(1, 2, 3))
+    self.assertFalse(tiebreak.point(False))
+    self.assertEqual(tiebreak, tennis.Tiebreak(1, 3, 3))
 
   def test_str(self):
     self.assertEqual(
-      str(tennis.Tiebreak(1, 2)),
-      'Tiebreak(first_server_points=1, first_returner_points=2)'
+      str(tennis.Tiebreak(1, 2, 3)),
+      'Tiebreak(first_server_points=1, first_returner_points=2, target_points=3)'
     )
 
   def test_repr(self):
     self.assertEqual(
-      repr(tennis.Tiebreak(1, 2)),
-      'Tiebreak(first_server_points=1, first_returner_points=2)'
+      repr(tennis.Tiebreak(1, 2, 3)),
+      'Tiebreak(first_server_points=1, first_returner_points=2, target_points=3)'
     )
 
   def test_eq(self):

@@ -66,7 +66,7 @@ class Set:
       return set_winner
 
     if self.tiebreak and len(self.games) == 12:
-      self.games.append(tennis.Tiebreak(first_server_points=0, first_returner_points=0))
+      self.games.append(tennis.Tiebreak(first_server_points=0, first_returner_points=0, target_points=7))
     else:
       self.games.append(tennis.Game(server_points=0, returner_points=0))
 

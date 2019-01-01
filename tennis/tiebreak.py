@@ -5,23 +5,26 @@ class Tiebreak:
   :param int first_server_points: number of points scored by the player who served first
   :param int first_returner_points: number of points scored by the player who returned
                                     first
+  :param int target_points: number of points required to win the tiebreak
   :var first_server_points: number of points scored by the player who served first
   :var first_returner_points: number of points scored by the player who returned first
+  :var target_points: number of points required to win the tiebreak
   '''
-  def __init__(self, first_server_points=0, first_returner_points=0):
+  def __init__(self, first_server_points=0, first_returner_points=0, target_points=7):
     self.first_server_points = first_server_points
     self.first_returner_points = first_returner_points
+    self.target_points = target_points
 
   '''
   :return: True if the first server won the tiebreak, False if the first returner won
            the tiebreak, and None otherwise
   '''
   def winner(self):
-    if self.first_server_points >= 7:
+    if self.first_server_points >= self.target_points:
       if self.first_server_points - self.first_returner_points >= 2:
         return True
 
-    if self.first_returner_points >= 7:
+    if self.first_returner_points >= self.target_points:
       if self.first_returner_points - self.first_server_points >= 2:
         return False
 
@@ -51,10 +54,11 @@ class Tiebreak:
   :return: a string representation of the tiebreak
   '''
   def __str__(self):
-    return '{}(first_server_points={}, first_returner_points={})'.format(
+    return '{}(first_server_points={}, first_returner_points={}, target_points={})'.format(
       type(self).__name__,
       self.first_server_points,
-      self.first_returner_points
+      self.first_returner_points,
+      self.target_points
     )
 
   '''
