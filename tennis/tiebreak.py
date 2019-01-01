@@ -11,6 +11,13 @@ class Tiebreak:
   :var target_points: number of points required to win the tiebreak
   '''
   def __init__(self, first_server_points=0, first_returner_points=0, target_points=7):
+    if min(first_server_points, first_returner_points, target_points) < 0:
+      raise RuntimeError('Point scores must be non-negative.')
+
+    if abs(first_server_points - first_returner_points) > 2 and \
+      max(first_server_points, first_returner_points) > target_points:
+      raise RuntimeError('Point score must be reachable.')
+
     self.first_server_points = first_server_points
     self.first_returner_points = first_returner_points
     self.target_points = target_points

@@ -21,6 +21,28 @@ class Tiebreak(unittest.TestCase):
     self.assertEqual(tiebreak.first_server_points, 3)
     self.assertEqual(tiebreak.first_returner_points, 4)
 
+  def test_init_negative_points(self):
+    with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
+      tennis.Tiebreak(-1, 0, 0)
+
+    with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
+      tennis.Tiebreak(0, -1, 0)
+
+    with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
+      tennis.Tiebreak(0, 0, -1)
+
+  def test_init_unreachable_points(self):
+    with self.assertRaises(RuntimeError, msg='Point scores must be reachable.'):
+      tennis.Tiebreak(6, 3, 5)
+
+    with self.assertRaises(RuntimeError, msg='Point scores must be reachable.'):
+      tennis.Tiebreak(3, 6, 5)
+
+    tennis.Tiebreak(6, 4, 5)
+    tennis.Tiebreak(4, 6, 5)
+    tennis.Tiebreak(5, 2, 5)
+    tennis.Tiebreak(2, 5, 5)
+
   def test_winner(self):
     self.assertIsNone(tennis.Tiebreak(0, 0).winner())
     self.assertIsNone(tennis.Tiebreak(7, 6).winner())
