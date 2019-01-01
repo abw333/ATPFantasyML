@@ -62,3 +62,10 @@ class Tiebreak:
   '''
   def __repr__(self):
     return str(self)
+
+  '''
+  :param object other: object to compare to the tiebreak
+  :return: True if the input object is equal to the tiebreak, and False otherwise
+  '''
+  def __eq__(self, other):
+    return isinstance(other, type(self)) and self.__dict__ == other.__dict__
