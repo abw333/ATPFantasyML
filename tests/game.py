@@ -21,6 +21,25 @@ class Game(unittest.TestCase):
     self.assertEqual(game.server_points, 3)
     self.assertEqual(game.returner_points, 4)
 
+  def test_init_negative_points(self):
+    with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
+      tennis.Game(0, -1)
+
+    with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
+      tennis.Game(-1, 0)
+
+  def test_init_unreachable_points(self):
+    with self.assertRaises(RuntimeError, msg='Point scores must be reachable.'):
+      tennis.Game(5, 2)
+
+    with self.assertRaises(RuntimeError, msg='Point scores must be reachable.'):
+      tennis.Game(2, 5)
+
+    tennis.Game(5, 3)
+    tennis.Game(3, 5)
+    tennis.Game(4, 1)
+    tennis.Game(1, 4)
+
   def test_winner(self):
     self.assertIsNone(tennis.Game(0, 0).winner())
     self.assertIsNone(tennis.Game(4, 3).winner())

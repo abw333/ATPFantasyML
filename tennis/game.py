@@ -8,6 +8,12 @@ class Game:
   :var returner_points: number of points scored by the returner
   '''
   def __init__(self, server_points=0, returner_points=0):
+    if min(server_points, returner_points) < 0:
+      raise RuntimeError('Point scores must be non-negative.')
+
+    if abs(server_points - returner_points) > 2 and max(server_points, returner_points) > 4:
+      raise RuntimeError('Point score must be reachable.')
+
     self.server_points = server_points
     self.returner_points = returner_points
 
