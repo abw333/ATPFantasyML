@@ -5,14 +5,38 @@ class Set:
   Python class for objects that represent tennis sets.
 
   :param list games: list of games played in the set
-  :param bool tiebreak: whether a tiebreak is played at 6-6
+  :param int tiebreak_games: number of games each player must have before a tiebreak is played,
+                             or None if a tiebreak is not to be played
+  :param int tiebreak_points: number of points required to win the tiebreak, or None if a tiebreak
+                              is not to be played
   :var games: list of games played in the set
-  :var tiebreak: whether a tiebreak is played at 6-6
+  :var tiebreak_games: number of games each player must have before a tiebreak is played, or None
+                       if a tiebreak is not to be played
+  :var tiebreak_points: number of points required to win the tiebreak, or None if a tiebreak is not
+                        to be played
   '''
-  def __init__(self, games=None, tiebreak=True):
-    self.games = \
-      [tennis.Game(server_points=0, returner_points=0)] if games is None else games
-    self.tiebreak = tiebreak
+  def __init__(self, games=None, tiebreak_games=6, tiebreak_points=7):
+    # TODO(abw333): validate games
+
+    if (tiebreak_games is None) != (tiebreak_points is None):
+      raise RuntimeError('tiebreak_games and tiebreak_points must both be None or non-None.')
+
+    if tiebreak_games is not None and min(tiebreak_games, tiebreak_points) < 0:
+      raise RuntimeError('Point scores must be non-negative.')
+
+    if games is not None:
+      self.games = games
+    elif tiebreak_games != 0:
+      self.games = [tennis.Game(server_points=0, returner_points=0)]
+    else:
+      self.games = [tennis.Tiebreak(
+        first_server_points=0,
+        first_returner_points=0,
+        target_points=tiebreak_points
+      )]
+
+    self.tiebreak_games = tiebreak_games
+    self.tiebreak_points = tiebreak_points
 
   '''
   :return: the number of games won by the player who served first
@@ -32,11 +56,11 @@ class Set:
   '''
   def winner(self):
     first_server_games = self.first_server_games()
-    if self.tiebreak and first_server_games == 7:
+    if self.tiebreak_games is not None and first_server_games == self.tiebreak_games + 1:
       return True
 
     first_returner_games = self.first_returner_games()
-    if self.tiebreak and first_returner_games == 7:
+    if self.tiebreak_games is not None and first_returner_games == self.tiebreak_games + 1:
       return False
 
     if first_server_games >= 6 and first_server_games - first_returner_games >= 2:
@@ -65,8 +89,14 @@ class Set:
     if set_winner is not None:
       return set_winner
 
-    if self.tiebreak and len(self.games) == 12:
-      self.games.append(tennis.Tiebreak(first_server_points=0, first_returner_points=0, target_points=7))
+    if self.tiebreak_games is not None and \
+      self.first_server_games() == self.tiebreak_games and \
+      self.first_returner_games() == self.tiebreak_games:
+      self.games.append(tennis.Tiebreak(
+        first_server_points=0,
+        first_returner_points=0,
+        target_points=self.tiebreak_points
+      ))
     else:
       self.games.append(tennis.Game(server_points=0, returner_points=0))
 
@@ -74,10 +104,11 @@ class Set:
   :return: a string representation of the set
   '''
   def __str__(self):
-    return '{}(games={}, tiebreak={})'.format(
+    return '{}(games={}, tiebreak_games={}, tiebreak_points={})'.format(
       type(self).__name__,
       self.games,
-      self.tiebreak
+      self.tiebreak_games,
+      self.tiebreak_points
     )
 
   '''
