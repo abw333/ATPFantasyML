@@ -64,7 +64,10 @@ class Set(unittest.TestCase):
   def test_test_init_first_tiebreak(self):
     zet = tennis.Set(games=None, tiebreak_games=0, tiebreak_points=3)
 
-    self.assertEqual(zet.games, [tennis.Tiebreak(0, 0, 3)])
+    self.assertEqual(
+      zet.games,
+      [tennis.Tiebreak(first_server_points=0, first_returner_points=0, target_points=3)]
+    )
     self.assertEqual(zet.tiebreak_games, 0)
     self.assertEqual(zet.tiebreak_points, 3)
 
@@ -111,7 +114,7 @@ class Set(unittest.TestCase):
         [
           tennis.Game(server_points=0, returner_points=4),
           tennis.Game(server_points=4, returner_points=0),
-          tennis.Tiebreak(0, 0, 7)
+          tennis.Tiebreak(first_server_points=0, first_returner_points=0, target_points=7)
         ]
       ).first_server_games(),
       0
@@ -121,7 +124,7 @@ class Set(unittest.TestCase):
         [
           tennis.Game(server_points=0, returner_points=4),
           tennis.Game(server_points=4, returner_points=0),
-          tennis.Tiebreak(0, 7, 7)
+          tennis.Tiebreak(first_server_points=0, first_returner_points=7, target_points=7)
         ]
       ).first_server_games(),
       0
@@ -131,7 +134,7 @@ class Set(unittest.TestCase):
         [
           tennis.Game(server_points=0, returner_points=4),
           tennis.Game(server_points=4, returner_points=0),
-          tennis.Tiebreak(7, 0, 7)
+          tennis.Tiebreak(first_server_points=7, first_returner_points=0, target_points=7)
         ]
       ).first_server_games(),
       1
@@ -167,7 +170,7 @@ class Set(unittest.TestCase):
         [
           tennis.Game(server_points=4, returner_points=0),
           tennis.Game(server_points=4, returner_points=0),
-          tennis.Tiebreak(0, 0, 7)
+          tennis.Tiebreak(first_server_points=0, first_returner_points=0, target_points=7)
         ]
       ).first_server_games(),
       1
@@ -177,7 +180,7 @@ class Set(unittest.TestCase):
         [
           tennis.Game(server_points=4, returner_points=0),
           tennis.Game(server_points=4, returner_points=0),
-          tennis.Tiebreak(0, 7, 7)
+          tennis.Tiebreak(first_server_points=0, first_returner_points=7, target_points=7)
         ]
       ).first_server_games(),
       1
@@ -187,7 +190,7 @@ class Set(unittest.TestCase):
         [
           tennis.Game(server_points=4, returner_points=0),
           tennis.Game(server_points=4, returner_points=0),
-          tennis.Tiebreak(7, 0, 7)
+          tennis.Tiebreak(first_server_points=7, first_returner_points=0, target_points=7)
         ]
       ).first_server_games(),
       2
@@ -236,7 +239,7 @@ class Set(unittest.TestCase):
         [
           tennis.Game(server_points=0, returner_points=4),
           tennis.Game(server_points=4, returner_points=0),
-          tennis.Tiebreak(0, 0, 7)
+          tennis.Tiebreak(first_server_points=0, first_returner_points=0, target_points=7)
         ]
       ).first_returner_games(),
       2
@@ -246,7 +249,7 @@ class Set(unittest.TestCase):
         [
           tennis.Game(server_points=0, returner_points=4),
           tennis.Game(server_points=4, returner_points=0),
-          tennis.Tiebreak(0, 7, 7)
+          tennis.Tiebreak(first_server_points=0, first_returner_points=7, target_points=7)
         ]
       ).first_returner_games(),
       3
@@ -256,7 +259,7 @@ class Set(unittest.TestCase):
         [
           tennis.Game(server_points=0, returner_points=4),
           tennis.Game(server_points=4, returner_points=0),
-          tennis.Tiebreak(7, 0, 7)
+          tennis.Tiebreak(first_server_points=7, first_returner_points=0, target_points=7)
         ]
       ).first_returner_games(),
       2
@@ -292,7 +295,7 @@ class Set(unittest.TestCase):
         [
           tennis.Game(server_points=4, returner_points=0),
           tennis.Game(server_points=4, returner_points=0),
-          tennis.Tiebreak(0, 0, 7)
+          tennis.Tiebreak(first_server_points=0, first_returner_points=0, target_points=7)
         ]
       ).first_returner_games(),
       1
@@ -302,7 +305,7 @@ class Set(unittest.TestCase):
         [
           tennis.Game(server_points=4, returner_points=0),
           tennis.Game(server_points=4, returner_points=0),
-          tennis.Tiebreak(0, 7, 7)
+          tennis.Tiebreak(first_server_points=0, first_returner_points=7, target_points=7)
         ]
       ).first_returner_games(),
       2
@@ -312,7 +315,7 @@ class Set(unittest.TestCase):
         [
           tennis.Game(server_points=4, returner_points=0),
           tennis.Game(server_points=4, returner_points=0),
-          tennis.Tiebreak(7, 0, 7)
+          tennis.Tiebreak(first_server_points=7, first_returner_points=0, target_points=7)
         ]
       ).first_returner_games(),
       1
@@ -320,19 +323,21 @@ class Set(unittest.TestCase):
 
   def test_winner(self):
     self.assertIsNone(tennis.Set(
-      games=[tennis.Game(server_points=4, returner_points=0)] * 2 + [tennis.Tiebreak(0, 0, 2)],
+      games=[tennis.Game(server_points=4, returner_points=0)] * 2 + \
+        [tennis.Tiebreak(first_server_points=0, first_returner_points=0, target_points=2)],
       tiebreak_games=1,
       tiebreak_points=2
     ).winner())
 
     self.assertTrue(tennis.Set(
-      games=[tennis.Tiebreak(2, 0, 0)],
+      games=[tennis.Tiebreak(first_server_points=2, first_returner_points=0, target_points=0)],
       tiebreak_games=0,
       tiebreak_points=0
     ).winner())
 
     self.assertFalse(tennis.Set(
-      games=[tennis.Game(server_points=4, returner_points=0)] * 4 + [tennis.Tiebreak(0, 4, 4)],
+      games=[tennis.Game(server_points=4, returner_points=0)] * 4 + \
+        [tennis.Tiebreak(first_server_points=0, first_returner_points=4, target_points=4)],
       tiebreak_games=2,
       tiebreak_points=4
     ).winner())
@@ -831,7 +836,8 @@ class Set(unittest.TestCase):
     self.assertEqual(
       zet,
       tennis.Set(
-        [tennis.Game(server_points=4, returner_points=0)] * 4 + [tennis.Tiebreak(0, 0, 3)],
+        [tennis.Game(server_points=4, returner_points=0)] * 4 + \
+          [tennis.Tiebreak(first_server_points=0, first_returner_points=0, target_points=3)],
         2,
         3
       )
@@ -840,7 +846,8 @@ class Set(unittest.TestCase):
     self.assertEqual(
       zet,
       tennis.Set(
-        [tennis.Game(server_points=4, returner_points=0)] * 4 + [tennis.Tiebreak(1, 0, 3)],
+        [tennis.Game(server_points=4, returner_points=0)] * 4 + \
+          [tennis.Tiebreak(first_server_points=1, first_returner_points=0, target_points=3)],
         2,
         3
       )
@@ -849,7 +856,8 @@ class Set(unittest.TestCase):
     self.assertEqual(
       zet,
       tennis.Set(
-        [tennis.Game(server_points=4, returner_points=0)] * 4 + [tennis.Tiebreak(2, 0, 3)],
+        [tennis.Game(server_points=4, returner_points=0)] * 4 + \
+          [tennis.Tiebreak(first_server_points=2, first_returner_points=0, target_points=3)],
         2,
         3
       )
@@ -858,7 +866,8 @@ class Set(unittest.TestCase):
     self.assertEqual(
       zet,
       tennis.Set(
-        [tennis.Game(server_points=4, returner_points=0)] * 4 + [tennis.Tiebreak(3, 0, 3)],
+        [tennis.Game(server_points=4, returner_points=0)] * 4 + \
+          [tennis.Tiebreak(first_server_points=3, first_returner_points=0, target_points=3)],
         2,
         3
       )
@@ -876,7 +885,8 @@ class Set(unittest.TestCase):
     self.assertEqual(
       zet,
       tennis.Set(
-        [tennis.Game(server_points=4, returner_points=0)] * 2 + [tennis.Tiebreak(0, 0, 2)],
+        [tennis.Game(server_points=4, returner_points=0)] * 2 + \
+          [tennis.Tiebreak(first_server_points=0, first_returner_points=0, target_points=2)],
         1,
         2
       )
@@ -885,7 +895,8 @@ class Set(unittest.TestCase):
     self.assertEqual(
       zet,
       tennis.Set(
-        [tennis.Game(server_points=4, returner_points=0)] * 2 + [tennis.Tiebreak(0, 1, 2)],
+        [tennis.Game(server_points=4, returner_points=0)] * 2 + \
+          [tennis.Tiebreak(first_server_points=0, first_returner_points=1, target_points=2)],
         1,
         2
       )
@@ -894,7 +905,8 @@ class Set(unittest.TestCase):
     self.assertEqual(
       zet,
       tennis.Set(
-        [tennis.Game(server_points=4, returner_points=0)] * 2 + [tennis.Tiebreak(0, 2, 2)],
+        [tennis.Game(server_points=4, returner_points=0)] * 2 + \
+          [tennis.Tiebreak(first_server_points=0, first_returner_points=2, target_points=2)],
         1,
         2
       )
@@ -915,7 +927,10 @@ class Set(unittest.TestCase):
     )
     self.assertEqual(
       str(tennis.Set(
-        [tennis.Game(server_points=1, returner_points=2), tennis.Tiebreak(3, 4, 7)],
+        [
+          tennis.Game(server_points=1, returner_points=2),
+          tennis.Tiebreak(first_server_points=3, first_returner_points=4, target_points=7)
+        ],
         5,
         7
       )),
@@ -944,7 +959,10 @@ class Set(unittest.TestCase):
     )
     self.assertEqual(
       repr(tennis.Set(
-        [tennis.Game(server_points=1, returner_points=2), tennis.Tiebreak(3, 4, 7)],
+        [
+          tennis.Game(server_points=1, returner_points=2),
+          tennis.Tiebreak(first_server_points=3, first_returner_points=4, target_points=7)
+        ],
         5,
         7
       )),

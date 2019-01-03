@@ -3,28 +3,27 @@ class Tiebreak:
   Python class for objects that represent tennis tiebreaks.
 
   :param int first_server_points: number of points scored by the player who served first
-  :param int first_returner_points: number of points scored by the player who returned
-                                    first
+  :param int first_returner_points: number of points scored by the player who returned first
   :param int target_points: number of points required to win the tiebreak
   :var first_server_points: number of points scored by the player who served first
   :var first_returner_points: number of points scored by the player who returned first
   :var target_points: number of points required to win the tiebreak
   '''
-  def __init__(self, first_server_points=0, first_returner_points=0, target_points=7):
+  def __init__(self, *, first_server_points=0, first_returner_points=0, target_points=7):
     if min(first_server_points, first_returner_points, target_points) < 0:
       raise RuntimeError('Point scores must be non-negative.')
 
-    if abs(first_server_points - first_returner_points) > 2 and \
-      max(first_server_points, first_returner_points) > target_points:
-      raise RuntimeError('Point score must be reachable.')
+    if abs(first_server_points - first_returner_points) > 2:
+      if max(first_server_points, first_returner_points) > target_points:
+        raise RuntimeError('Point score must be reachable.')
 
     self.first_server_points = first_server_points
     self.first_returner_points = first_returner_points
     self.target_points = target_points
 
   '''
-  :return: True if the first server won the tiebreak, False if the first returner won
-           the tiebreak, and None otherwise
+  :return: True if the first server won the tiebreak, False if the first returner won the tiebreak,
+           and None otherwise
   '''
   def winner(self):
     if self.first_server_points >= self.target_points:
@@ -39,16 +38,13 @@ class Tiebreak:
   Advances the tiebreak's score by a point.
 
   :param bool first_server: True if the first server won the point, and False otherwise
-  :return: True if the first server won the tiebreak, False if the first returner won
-           the tiebreak, and None otherwise
-  :raises RuntimeError: if the tiebreak's score cannot be advanced because the tiebreak
-                        is over
+  :return: True if the first server won the tiebreak, False if the first returner won the tiebreak,
+           and None otherwise
+  :raises RuntimeError: if the tiebreak's score cannot be advanced because the tiebreak is over
   '''
-  def point(self, first_server):
+  def point(self, *, first_server):
     if self.winner() is not None:
-      raise RuntimeError(
-        'Cannot advance this tiebreak\'s score because the tiebreak is over.'
-      )
+      raise RuntimeError('Cannot advance this tiebreak\'s score because the tiebreak is over.')
 
     if first_server:
       self.first_server_points += 1
