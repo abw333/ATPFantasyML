@@ -360,22 +360,22 @@ class Set(unittest.TestCase):
     self.assertEqual(str(tennis.Set([], 1, 2)), 'Set(games=[], tiebreak_games=1, tiebreak_points=2)')
     self.assertEqual(
       str(tennis.Set([tennis.Game(1, 2)], 3, 4)),
-      'Set(games=[Game(server_points=1, returner_points=2)], tiebreak_games=3, tiebreak_points=4)'
+      'Set(games=[Game(server_points=1, returner_points=2, deciding_point=False)], tiebreak_games=3, tiebreak_points=4)'
     )
     self.assertEqual(
       str(tennis.Set([tennis.Game(1, 2), tennis.Tiebreak(3, 4, 7)], 5, 7)),
-      'Set(games=[Game(server_points=1, returner_points=2), Tiebreak(first_server_points=3, first_returner_points=4, target_points=7)], tiebreak_games=5, tiebreak_points=7)'
+      'Set(games=[Game(server_points=1, returner_points=2, deciding_point=False), Tiebreak(first_server_points=3, first_returner_points=4, target_points=7)], tiebreak_games=5, tiebreak_points=7)'
     )
 
   def test_repr(self):
     self.assertEqual(repr(tennis.Set([], 1, 2)), 'Set(games=[], tiebreak_games=1, tiebreak_points=2)')
     self.assertEqual(
       repr(tennis.Set([tennis.Game(1, 2)], 3, 4)),
-      'Set(games=[Game(server_points=1, returner_points=2)], tiebreak_games=3, tiebreak_points=4)'
+      'Set(games=[Game(server_points=1, returner_points=2, deciding_point=False)], tiebreak_games=3, tiebreak_points=4)'
     )
     self.assertEqual(
       repr(tennis.Set([tennis.Game(1, 2), tennis.Tiebreak(3, 4, 7)], 5, 7)),
-      'Set(games=[Game(server_points=1, returner_points=2), Tiebreak(first_server_points=3, first_returner_points=4, target_points=7)], tiebreak_games=5, tiebreak_points=7)'
+      'Set(games=[Game(server_points=1, returner_points=2, deciding_point=False), Tiebreak(first_server_points=3, first_returner_points=4, target_points=7)], tiebreak_games=5, tiebreak_points=7)'
     )
 
   def test_eq(self):
