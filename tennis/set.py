@@ -5,17 +5,17 @@ class Set:
   Python class for objects that represent tennis sets.
 
   :param list games: list of games played in the set
-  :param int tiebreak_games: number of games each player must have before a tiebreak is played,
-                             or None if a tiebreak is not to be played
+  :param int tiebreak_games: number of games each player must have before a tiebreak is played, or
+                             None if a tiebreak is not to be played
   :param int tiebreak_points: number of points required to win the tiebreak, or None if a tiebreak
                               is not to be played
   :var games: list of games played in the set
-  :var tiebreak_games: number of games each player must have before a tiebreak is played, or None
-                       if a tiebreak is not to be played
+  :var tiebreak_games: number of games each player must have before a tiebreak is played, or None if
+                       a tiebreak is not to be played
   :var tiebreak_points: number of points required to win the tiebreak, or None if a tiebreak is not
                         to be played
   '''
-  def __init__(self, games=None, tiebreak_games=6, tiebreak_points=7):
+  def __init__(self, *, games=None, tiebreak_games=6, tiebreak_points=7):
     # TODO(abw333): validate games
 
     if (tiebreak_games is None) != (tiebreak_points is None):
@@ -51,8 +51,8 @@ class Set:
     return len([i for i, g in enumerate(self.games) if (i % 2 == 1) == g.winner()])
 
   '''
-  :return: True if the first server won the set, False if the first returner won the
-           set, and None otherwise
+  :return: True if the first server won the set, False if the first returner won the set, and None
+           otherwise
   '''
   def winner(self):
     first_server_games = self.first_server_games()
@@ -73,11 +73,11 @@ class Set:
   Advances the set's score by a point.
 
   :param bool first_server: True if the first server won the point, and False otherwise
-  :return: True if the first server won the set, False if the first returner won the
-           set, and None otherwise
+  :return: True if the first server won the set, False if the first returner won the set, and None
+           otherwise
   :raises RuntimeError: if the set's score cannot be advanced because the set is over
   '''
-  def point(self, first_server):
+  def point(self, *, first_server):
     if self.winner() is not None:
       raise RuntimeError('Cannot advance this set\'s score because the set is over.')
 
