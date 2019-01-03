@@ -9,7 +9,7 @@ class Game:
   :var returner_points: number of points scored by the returner
   :var deciding_point: whether to play a deciding point at deuce
   '''
-  def __init__(self, server_points=0, returner_points=0, deciding_point=False):
+  def __init__(self, *, server_points=0, returner_points=0, deciding_point=False):
     if min(server_points, returner_points) < 0:
       raise RuntimeError('Point scores must be non-negative.')
 
@@ -46,16 +46,16 @@ class Game:
   '''
   Advances the game's score by a point.
 
-  :param bool server: True if the server won the point, and False otherwise
+  :param bool first_server: True if the server won the point, and False otherwise
   :return: True if the server won the game, False if the returner won the game, and None
            otherwise
   :raises RuntimeError: if the game's score cannot be advanced because the game is over
   '''
-  def point(self, server):
+  def point(self, *, first_server):
     if self.winner() is not None:
       raise RuntimeError('Cannot advance this game\'s score because the game is over.')
 
-    if server:
+    if first_server:
       self.server_points += 1
     else:
       self.returner_points += 1

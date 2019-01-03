@@ -81,7 +81,7 @@ class Set:
     if self.winner() is not None:
       raise RuntimeError('Cannot advance this set\'s score because the set is over.')
 
-    game_winner = self.games[-1].point((len(self.games) % 2 == 1) == first_server)
+    game_winner = self.games[-1].point(first_server=(len(self.games) % 2 == 1) == first_server)
     if game_winner is None:
       return None
 
