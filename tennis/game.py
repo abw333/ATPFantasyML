@@ -27,8 +27,7 @@ class Game:
     self.deciding_point = deciding_point
 
   '''
-  :return: True if the server won the game, False if the returner won the game, and None
-           otherwise
+  :return: True if the server won the game, False if the returner won the game, and None otherwise
   '''
   def winner(self):
     if self.deciding_point and self.server_points == 4:
@@ -47,8 +46,7 @@ class Game:
   Advances the game's score by a point.
 
   :param bool first_server: True if the server won the point, and False otherwise
-  :return: True if the server won the game, False if the returner won the game, and None
-           otherwise
+  :return: True if the server won the game, False if the returner won the game, and None otherwise
   :raises RuntimeError: if the game's score cannot be advanced because the game is over
   '''
   def point(self, *, first_server):
