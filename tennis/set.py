@@ -5,20 +5,33 @@ class Set:
   Python class for objects that represent tennis sets.
 
   :param list games: list of games played in the set
+  :param int target_games: number of games required to win the set
   :param bool deciding_point: whether to play a deciding point at deuce
   :param int tiebreak_games: number of games each player must have before a tiebreak is played, or
                              None if a tiebreak is not to be played
   :param int tiebreak_points: number of points required to win the tiebreak, or None if a tiebreak
                               is not to be played
   :var games: list of games played in the set
+  :var target_games: number of games required to win the set
   :var deciding_point: whether to play a deciding point at deuce
   :var tiebreak_games: number of games each player must have before a tiebreak is played, or None if
                        a tiebreak is not to be played
   :var tiebreak_points: number of points required to win the tiebreak, or None if a tiebreak is not
                         to be played
   '''
-  def __init__(self, *, games=None, deciding_point=False, tiebreak_games=6, tiebreak_points=7):
+  def __init__(
+    self,
+    *,
+    games=None,
+    target_games=6,
+    deciding_point=False,
+    tiebreak_games=6,
+    tiebreak_points=7
+  ):
     # TODO(abw333): validate games
+
+    if target_games < 0:
+      raise RuntimeError('Point scores must be non-negative.')
 
     if (tiebreak_games is None) != (tiebreak_points is None):
       raise RuntimeError('tiebreak_games and tiebreak_points must both be None or non-None.')
@@ -37,6 +50,7 @@ class Set:
         target_points=tiebreak_points
       )]
 
+    self.target_games = target_games
     self.deciding_point = deciding_point
     self.tiebreak_games = tiebreak_games
     self.tiebreak_points = tiebreak_points
@@ -66,10 +80,10 @@ class Set:
     if self.tiebreak_games is not None and first_returner_games == self.tiebreak_games + 1:
       return False
 
-    if first_server_games >= 6 and first_server_games - first_returner_games >= 2:
+    if first_server_games >= self.target_games and first_server_games - first_returner_games >= 2:
       return True
 
-    if first_returner_games >= 6 and first_returner_games - first_server_games >= 2:
+    if first_returner_games >= self.target_games and first_returner_games - first_server_games >= 2:
       return False
 
   '''
@@ -111,9 +125,16 @@ class Set:
   :return: a string representation of the set
   '''
   def __str__(self):
-    return '{}(games={}, deciding_point={}, tiebreak_games={}, tiebreak_points={})'.format(
+    return ('{}('
+      'games={}, '
+      'target_games={}, '
+      'deciding_point={}, '
+      'tiebreak_games={}, '
+      'tiebreak_points={}'
+    ')').format(
       type(self).__name__,
       self.games,
+      self.target_games,
       self.deciding_point,
       self.tiebreak_games,
       self.tiebreak_points
