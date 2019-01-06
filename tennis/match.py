@@ -70,6 +70,22 @@ class Match:
       yield served_first
 
   '''
+  :return: the number of sets won by the player who served first
+  '''
+  def first_server_sets(self):
+    return len([
+      0 for fssf, s in zip(self.first_server_served_first(), self.sets) if fssf == s.winner()
+    ])
+
+  '''
+  :return: the number of sets won by the player who returned first
+  '''
+  def first_returner_sets(self):
+    return len([
+      0 for fssf, s in zip(self.first_server_served_first(), self.sets) if (not fssf) == s.winner()
+    ])
+
+  '''
   :return: a string representation of the match
   '''
   def __str__(self):

@@ -109,6 +109,54 @@ class Match(unittest.TestCase):
 
     self.assertEqual(list(match.first_server_served_first()), [True, True, False, False, True])
 
+  def test_sets(self):
+    match = tennis.Match(sets=[])
+
+    self.assertEqual(match.first_server_sets(), 0)
+    self.assertEqual(match.first_returner_sets(), 0)
+
+    match.sets.append(tennis.Set(
+      games=[tennis.Game(server_points=4), tennis.Game(returner_points=4)],
+      target_games=2
+    ))
+
+    self.assertEqual(match.first_server_sets(), 1)
+    self.assertEqual(match.first_returner_sets(), 0)
+
+    match.sets.append(tennis.Set(
+      games=[tennis.Tiebreak(first_returner_points=7)],
+      tiebreak_games=0
+    ))
+
+    self.assertEqual(match.first_server_sets(), 1)
+    self.assertEqual(match.first_returner_sets(), 1)
+
+    match.sets.append(tennis.Set(
+      games=[tennis.Game(server_points=4), tennis.Game(returner_points=4)],
+      target_games=2
+    ))
+
+    self.assertEqual(match.first_server_sets(), 1)
+    self.assertEqual(match.first_returner_sets(), 2)
+
+    match.sets.append(tennis.Set(
+      games=[tennis.Tiebreak(first_returner_points=7)],
+      tiebreak_games=0
+    ))
+
+    self.assertEqual(match.first_server_sets(), 2)
+    self.assertEqual(match.first_returner_sets(), 2)
+
+    match.sets.append(tennis.Set())
+
+    self.assertEqual(match.first_server_sets(), 2)
+    self.assertEqual(match.first_returner_sets(), 2)
+
+    match.sets.append(tennis.Set())
+
+    self.assertEqual(match.first_server_sets(), 2)
+    self.assertEqual(match.first_returner_sets(), 2)
+
   def test_str(self):
     self.assertEqual(
       str(tennis.Match(
