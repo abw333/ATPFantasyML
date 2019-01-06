@@ -130,6 +130,38 @@ class Match(unittest.TestCase):
       ')'
     )
 
+  def test_repr(self):
+    self.assertEqual(
+      repr(tennis.Match(
+        sets=[tennis.Set(
+          games=[tennis.Game(server_points=1, returner_points=2, deciding_point=True)],
+          target_games=3,
+          deciding_point=True,
+          tiebreak_games=4,
+          tiebreak_points=5
+        )],
+        target_sets=6,
+        target_games=3,
+        deciding_point=True,
+        tiebreak_games=4,
+        tiebreak_points=5
+      )),
+      'Match('
+        'sets=[Set('
+          'games=[Game(server_points=1, returner_points=2, deciding_point=True)], '
+          'target_games=3, '
+          'deciding_point=True, '
+          'tiebreak_games=4, '
+          'tiebreak_points=5'
+        ')], '
+        'target_sets=6, '
+        'target_games=3, '
+        'deciding_point=True, '
+        'tiebreak_games=4, '
+        'tiebreak_points=5'
+      ')'
+    )
+
   def test_eq(self):
     self.assertEqual(
       tennis.Match(

@@ -78,6 +78,12 @@ class Match:
     )
 
   '''
+  :return: a string representation of the match
+  '''
+  def __repr__(self):
+    return str(self)
+
+  '''
   :param object other: object to compare to the match
   :return: True if the input object is equal to the match, and False otherwise
   '''
