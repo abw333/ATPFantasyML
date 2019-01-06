@@ -57,6 +57,27 @@ class Match:
     self.tiebreak_points = tiebreak_points
 
   '''
+  :return: a string representation of the match
+  '''
+  def __str__(self):
+    return ('{}('
+      'sets={}, '
+      'target_sets={}, '
+      'target_games={}, '
+      'deciding_point={}, '
+      'tiebreak_games={}, '
+      'tiebreak_points={}'
+    ')').format(
+      type(self).__name__,
+      self.sets,
+      self.target_sets,
+      self.target_games,
+      self.deciding_point,
+      self.tiebreak_games,
+      self.tiebreak_points
+    )
+
+  '''
   :param object other: object to compare to the match
   :return: True if the input object is equal to the match, and False otherwise
   '''

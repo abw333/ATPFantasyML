@@ -98,6 +98,38 @@ class Match(unittest.TestCase):
     self.assertEqual(match.tiebreak_games, 2)
     self.assertEqual(match.tiebreak_points, 1)
 
+  def test_str(self):
+    self.assertEqual(
+      str(tennis.Match(
+        sets=[tennis.Set(
+          games=[tennis.Game(server_points=1, returner_points=2, deciding_point=True)],
+          target_games=3,
+          deciding_point=True,
+          tiebreak_games=4,
+          tiebreak_points=5
+        )],
+        target_sets=6,
+        target_games=3,
+        deciding_point=True,
+        tiebreak_games=4,
+        tiebreak_points=5
+      )),
+      'Match('
+        'sets=[Set('
+          'games=[Game(server_points=1, returner_points=2, deciding_point=True)], '
+          'target_games=3, '
+          'deciding_point=True, '
+          'tiebreak_games=4, '
+          'tiebreak_points=5'
+        ')], '
+        'target_sets=6, '
+        'target_games=3, '
+        'deciding_point=True, '
+        'tiebreak_games=4, '
+        'tiebreak_points=5'
+      ')'
+    )
+
   def test_eq(self):
     self.assertEqual(
       tennis.Match(
