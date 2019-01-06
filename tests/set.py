@@ -7,6 +7,7 @@ class Set(unittest.TestCase):
     zet = tennis.Set()
 
     self.assertEqual(zet.games, [tennis.Game(server_points=0, returner_points=0)])
+    self.assertFalse(zet.deciding_point)
     self.assertEqual(zet.tiebreak_games, 6)
     self.assertEqual(zet.tiebreak_points, 7)
 
@@ -21,10 +22,12 @@ class Set(unittest.TestCase):
     zet = tennis.Set(
       tiebreak_points=1,
       tiebreak_games=2,
+      deciding_point=True,
       games=[tennis.Game(server_points=3, returner_points=4)]
     )
 
     self.assertEqual(zet.games, [tennis.Game(server_points=3, returner_points=4)])
+    self.assertTrue(zet.deciding_point)
     self.assertEqual(zet.tiebreak_games, 2)
     self.assertEqual(zet.tiebreak_points, 1)
 
@@ -49,15 +52,15 @@ class Set(unittest.TestCase):
       tennis.Set(tiebreak_games=1, tiebreak_points=-1)
 
   def test_init_first_game(self):
-    zet = tennis.Set(games=None, tiebreak_games=1, tiebreak_points=2)
+    zet = tennis.Set(games=None, deciding_point=False, tiebreak_games=1, tiebreak_points=2)
 
-    self.assertEqual(zet.games, [tennis.Game()])
+    self.assertEqual(zet.games, [tennis.Game(deciding_point=False)])
     self.assertEqual(zet.tiebreak_games, 1)
     self.assertEqual(zet.tiebreak_points, 2)
 
-    zet = tennis.Set(games=None, tiebreak_games=None, tiebreak_points=None)
+    zet = tennis.Set(games=None, deciding_point=True, tiebreak_games=None, tiebreak_points=None)
 
-    self.assertEqual(zet.games, [tennis.Game()])
+    self.assertEqual(zet.games, [tennis.Game(deciding_point=True)])
     self.assertIsNone(zet.tiebreak_games)
     self.assertIsNone(zet.tiebreak_points)
 
@@ -399,221 +402,305 @@ class Set(unittest.TestCase):
         tennis.Game(server_points=0, returner_points=4)
       ] * 3).point(first_server=True)
 
-    zet = tennis.Set()
-    self.assertIsNone(zet.point(first_server=True))
-    self.assertEqual(zet, tennis.Set(games=[tennis.Game(server_points=1, returner_points=0)]))
-    self.assertIsNone(zet.point(first_server=True))
-    self.assertEqual(zet, tennis.Set(games=[tennis.Game(server_points=2, returner_points=0)]))
-    self.assertIsNone(zet.point(first_server=True))
-    self.assertEqual(zet, tennis.Set(games=[tennis.Game(server_points=3, returner_points=0)]))
+    zet = tennis.Set(deciding_point=True)
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[tennis.Game(server_points=4, returner_points=0), tennis.Game()])
+      tennis.Set(
+        games=[tennis.Game(server_points=1, returner_points=0, deciding_point=True)],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=1)
-      ])
+      tennis.Set(
+        games=[tennis.Game(server_points=2, returner_points=0, deciding_point=True)],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=2)
-      ])
+      tennis.Set(
+        games=[tennis.Game(server_points=3, returner_points=0, deciding_point=True)],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=3)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game()
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=1, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=1, returner_points=0)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=2, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=2, returner_points=0)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=3, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=3, returner_points=0)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game()
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=1, returner_points=0, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=1)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=2, returner_points=0, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=2)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=3, returner_points=0, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=3)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game()
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=1, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=1, returner_points=0)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=2, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=2, returner_points=0)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=3, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=3, returner_points=0)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game()
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=1, returner_points=0, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=1)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=2, returner_points=0, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=2)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=3, returner_points=0, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertIsNone(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=3)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(deciding_point=True)
+        ],
+        deciding_point=True
+      )
+    )
+    self.assertIsNone(zet.point(first_server=True))
+    self.assertEqual(
+      zet,
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=1, deciding_point=True)
+        ],
+        deciding_point=True
+      )
+    )
+    self.assertIsNone(zet.point(first_server=True))
+    self.assertEqual(
+      zet,
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=2, deciding_point=True)
+        ],
+        deciding_point=True
+      )
+    )
+    self.assertIsNone(zet.point(first_server=True))
+    self.assertEqual(
+      zet,
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=3, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
     self.assertTrue(zet.point(first_server=True))
     self.assertEqual(
       zet,
-      tennis.Set(games=[
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4),
-        tennis.Game(server_points=4, returner_points=0),
-        tennis.Game(server_points=0, returner_points=4)
-      ])
+      tennis.Set(
+        games=[
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True),
+          tennis.Game(server_points=4, returner_points=0, deciding_point=True),
+          tennis.Game(server_points=0, returner_points=4, deciding_point=True)
+        ],
+        deciding_point=True
+      )
     )
 
     zet = tennis.Set()
@@ -922,12 +1009,17 @@ class Set(unittest.TestCase):
   def test_str(self):
     self.assertEqual(
       str(tennis.Set(games=[], tiebreak_games=1, tiebreak_points=2)),
-      'Set(games=[], tiebreak_games=1, tiebreak_points=2)'
+      'Set(games=[], deciding_point=False, tiebreak_games=1, tiebreak_points=2)'
     )
     self.assertEqual(
-      str(tennis.Set(games=[tennis.Game(server_points=1, returner_points=2)], tiebreak_games=3, tiebreak_points=4)),
+      str(tennis.Set(
+        games=[tennis.Game(server_points=1, returner_points=2)],
+        tiebreak_games=3,
+        tiebreak_points=4
+      )),
       'Set('
         'games=[Game(server_points=1, returner_points=2, deciding_point=False)], '
+        'deciding_point=False, '
         'tiebreak_games=3, '
         'tiebreak_points=4'
       ')'
@@ -946,6 +1038,7 @@ class Set(unittest.TestCase):
           'Game(server_points=1, returner_points=2, deciding_point=False), '
           'Tiebreak(first_server_points=3, first_returner_points=4, target_points=7)'
         '], '
+        'deciding_point=False, '
         'tiebreak_games=5, '
         'tiebreak_points=7'
       ')'
@@ -954,12 +1047,17 @@ class Set(unittest.TestCase):
   def test_repr(self):
     self.assertEqual(
       repr(tennis.Set(games=[], tiebreak_games=1, tiebreak_points=2)),
-      'Set(games=[], tiebreak_games=1, tiebreak_points=2)'
+      'Set(games=[], deciding_point=False, tiebreak_games=1, tiebreak_points=2)'
     )
     self.assertEqual(
-      repr(tennis.Set(games=[tennis.Game(server_points=1, returner_points=2)], tiebreak_games=3, tiebreak_points=4)),
+      repr(tennis.Set(
+        games=[tennis.Game(server_points=1, returner_points=2)],
+        tiebreak_games=3,
+        tiebreak_points=4
+      )),
       'Set('
         'games=[Game(server_points=1, returner_points=2, deciding_point=False)], '
+        'deciding_point=False, '
         'tiebreak_games=3, '
         'tiebreak_points=4'
       ')'
@@ -978,22 +1076,31 @@ class Set(unittest.TestCase):
           'Game(server_points=1, returner_points=2, deciding_point=False), '
           'Tiebreak(first_server_points=3, first_returner_points=4, target_points=7)'
         '], '
+        'deciding_point=False, '
         'tiebreak_games=5, '
         'tiebreak_points=7'
       ')'
     )
 
   def test_eq(self):
-    self.assertEqual(tennis.Set(games=[], tiebreak_games=1), tennis.Set(games=[], tiebreak_games=1))
     self.assertEqual(
-      tennis.Set(games=[tennis.Game(server_points=1, returner_points=2)], tiebreak_games=2),
-      tennis.Set(games=[tennis.Game(server_points=1, returner_points=2)], tiebreak_games=2)
+      tennis.Set(
+        games=[tennis.Game(server_points=1, returner_points=2)],
+        deciding_point=True,
+        tiebreak_games=2,
+        tiebreak_points=3
+      ),
+      tennis.Set(
+        games=[tennis.Game(server_points=1, returner_points=2)],
+        deciding_point=True,
+        tiebreak_games=2,
+        tiebreak_points=3
+      )
     )
-    self.assertNotEqual(tennis.Set(games=[], tiebreak_games=1), tennis.Set(games=[], tiebreak_games=2))
-    self.assertNotEqual(
-      tennis.Set(games=[], tiebreak_games=1),
-      tennis.Set(games=[tennis.Game(server_points=1, returner_points=2)], tiebreak_games=1)
-    )
+    self.assertNotEqual(tennis.Set(games=None), tennis.Set(games=[]))
+    self.assertNotEqual(tennis.Set(deciding_point=True), tennis.Set(deciding_point=False))
+    self.assertNotEqual(tennis.Set(tiebreak_games=1), tennis.Set(tiebreak_games=2))
+    self.assertNotEqual(tennis.Set(tiebreak_points=3), tennis.Set(tiebreak_points=4))
 
 if __name__ == '__main__':
   unittest.main()

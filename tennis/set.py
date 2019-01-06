@@ -5,17 +5,19 @@ class Set:
   Python class for objects that represent tennis sets.
 
   :param list games: list of games played in the set
+  :param bool deciding_point: whether to play a deciding point at deuce
   :param int tiebreak_games: number of games each player must have before a tiebreak is played, or
                              None if a tiebreak is not to be played
   :param int tiebreak_points: number of points required to win the tiebreak, or None if a tiebreak
                               is not to be played
   :var games: list of games played in the set
+  :var deciding_point: whether to play a deciding point at deuce
   :var tiebreak_games: number of games each player must have before a tiebreak is played, or None if
                        a tiebreak is not to be played
   :var tiebreak_points: number of points required to win the tiebreak, or None if a tiebreak is not
                         to be played
   '''
-  def __init__(self, *, games=None, tiebreak_games=6, tiebreak_points=7):
+  def __init__(self, *, games=None, deciding_point=False, tiebreak_games=6, tiebreak_points=7):
     # TODO(abw333): validate games
 
     if (tiebreak_games is None) != (tiebreak_points is None):
@@ -27,7 +29,7 @@ class Set:
     if games is not None:
       self.games = games
     elif tiebreak_games != 0:
-      self.games = [tennis.Game(server_points=0, returner_points=0)]
+      self.games = [tennis.Game(server_points=0, returner_points=0, deciding_point=deciding_point)]
     else:
       self.games = [tennis.Tiebreak(
         first_server_points=0,
@@ -35,6 +37,7 @@ class Set:
         target_points=tiebreak_points
       )]
 
+    self.deciding_point = deciding_point
     self.tiebreak_games = tiebreak_games
     self.tiebreak_points = tiebreak_points
 
@@ -98,15 +101,20 @@ class Set:
         target_points=self.tiebreak_points
       ))
     else:
-      self.games.append(tennis.Game(server_points=0, returner_points=0))
+      self.games.append(tennis.Game(
+        server_points=0,
+        returner_points=0,
+        deciding_point=self.deciding_point
+      ))
 
   '''
   :return: a string representation of the set
   '''
   def __str__(self):
-    return '{}(games={}, tiebreak_games={}, tiebreak_points={})'.format(
+    return '{}(games={}, deciding_point={}, tiebreak_games={}, tiebreak_points={})'.format(
       type(self).__name__,
       self.games,
+      self.deciding_point,
       self.tiebreak_games,
       self.tiebreak_points
     )
