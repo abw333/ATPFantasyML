@@ -57,6 +57,19 @@ class Match:
     self.tiebreak_points = tiebreak_points
 
   '''
+  :return: yields a boolean for each set that indicates whether the player that served first in the
+           first set also served first in that set
+  '''
+  def first_server_served_first(self):
+    for i, zet in enumerate(self.sets):
+      if not i:
+        served_first = True
+      elif len(self.sets[i - 1].games) % 2:
+        served_first = not served_first
+
+      yield served_first
+
+  '''
   :return: a string representation of the match
   '''
   def __str__(self):
