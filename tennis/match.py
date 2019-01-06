@@ -55,3 +55,10 @@ class Match:
     self.deciding_point = deciding_point
     self.tiebreak_games = tiebreak_games
     self.tiebreak_points = tiebreak_points
+
+  '''
+  :param object other: object to compare to the match
+  :return: True if the input object is equal to the match, and False otherwise
+  '''
+  def __eq__(self, other):
+    return isinstance(other, type(self)) and self.__dict__ == other.__dict__

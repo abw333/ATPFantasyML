@@ -98,5 +98,43 @@ class Match(unittest.TestCase):
     self.assertEqual(match.tiebreak_games, 2)
     self.assertEqual(match.tiebreak_points, 1)
 
+  def test_eq(self):
+    self.assertEqual(
+      tennis.Match(
+        sets=[tennis.Set(
+          games=[tennis.Game(server_points=1, returner_points=2, deciding_point=True)],
+          target_games=3,
+          deciding_point=True,
+          tiebreak_games=4,
+          tiebreak_points=5
+        )],
+        target_sets=6,
+        target_games=3,
+        deciding_point=True,
+        tiebreak_games=4,
+        tiebreak_points=5
+      ),
+      tennis.Match(
+        sets=[tennis.Set(
+          games=[tennis.Game(server_points=1, returner_points=2, deciding_point=True)],
+          target_games=3,
+          deciding_point=True,
+          tiebreak_games=4,
+          tiebreak_points=5
+        )],
+        target_sets=6,
+        target_games=3,
+        deciding_point=True,
+        tiebreak_games=4,
+        tiebreak_points=5
+      )
+    )
+    self.assertNotEqual(tennis.Match(sets=None), tennis.Match(sets=[]))
+    self.assertNotEqual(tennis.Match(target_sets=1), tennis.Match(target_sets=2))
+    self.assertNotEqual(tennis.Match(target_games=3), tennis.Match(target_games=4))
+    self.assertNotEqual(tennis.Match(deciding_point=True), tennis.Match(deciding_point=False))
+    self.assertNotEqual(tennis.Match(tiebreak_games=5), tennis.Match(tiebreak_games=6))
+    self.assertNotEqual(tennis.Match(tiebreak_points=7), tennis.Match(tiebreak_points=8))
+
 if __name__ == '__main__':
   unittest.main()
