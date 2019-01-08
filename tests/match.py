@@ -61,9 +61,6 @@ class Match(unittest.TestCase):
 
   def test_init_negative_points(self):
     with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
-      tennis.Match(target_sets=-1)
-
-    with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
       tennis.Match(target_games=-1)
 
     with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
@@ -71,6 +68,10 @@ class Match(unittest.TestCase):
 
     with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
       tennis.Match(tiebreak_games=1, tiebreak_points=-1)
+
+  def test_init_zero_target_sets(self):
+    with self.assertRaises(RuntimeError, msg='target_sets must be at least 1.'):
+      tennis.Match(target_sets=0)
 
   def test_init_first_set(self):
     match = tennis.Match(

@@ -33,7 +33,10 @@ class Match:
   ):
     # TODO(abw333): validate sets
 
-    if min(target_sets, target_games) < 0:
+    if target_sets < 1:
+      raise RuntimeError('target_sets must be at least 1.')
+
+    if target_games < 0:
       raise RuntimeError('Point scores must be non-negative.')
 
     if (tiebreak_games is None) != (tiebreak_points is None):
