@@ -1,3 +1,4 @@
+import re
 import unittest
 
 import tennis
@@ -23,9 +24,9 @@ class Match(unittest.TestCase):
     self.assertEqual(match.tiebreak_points, 7)
 
   def test_init_args(self):
-    with self.assertRaises(
+    with self.assertRaisesRegex(
       TypeError,
-      msg='__init__() takes 1 positional argument but 2 were given'
+      '^{}$'.format(re.escape('__init__() takes 1 positional argument but 2 were given'))
     ):
       tennis.Match([])
 
@@ -47,30 +48,42 @@ class Match(unittest.TestCase):
     self.assertEqual(match.tiebreak_points, 1)
 
   def test_init_inconsistent_tiebreak_args(self):
-    with self.assertRaises(
+    with self.assertRaisesRegex(
       RuntimeError,
-      msg='tiebreak_games and tiebreak_points must both be None or non-None.'
+      '^{}$'.format(re.escape('tiebreak_games and tiebreak_points must both be None or non-None.'))
     ):
       tennis.Match(tiebreak_games=1, tiebreak_points=None)
 
-    with self.assertRaises(
+    with self.assertRaisesRegex(
       RuntimeError,
-      msg='tiebreak_games and tiebreak_points must both be None or non-None.'
+      '^{}$'.format(re.escape('tiebreak_games and tiebreak_points must both be None or non-None.'))
     ):
       tennis.Match(tiebreak_games=None, tiebreak_points=1)
 
   def test_init_negative_points(self):
-    with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
+    with self.assertRaisesRegex(
+      RuntimeError,
+      '^{}$'.format(re.escape('Point scores must be non-negative.'))
+    ):
       tennis.Match(target_games=-1)
 
-    with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
+    with self.assertRaisesRegex(
+      RuntimeError,
+      '^{}$'.format(re.escape('Point scores must be non-negative.'))
+    ):
       tennis.Match(tiebreak_games=-1, tiebreak_points=1)
 
-    with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
+    with self.assertRaisesRegex(
+      RuntimeError,
+      '^{}$'.format(re.escape('Point scores must be non-negative.'))
+    ):
       tennis.Match(tiebreak_games=1, tiebreak_points=-1)
 
   def test_init_zero_target_sets(self):
-    with self.assertRaises(RuntimeError, msg='target_sets must be at least 1.'):
+    with self.assertRaisesRegex(
+      RuntimeError,
+      '^{}$'.format(re.escape('target_sets must be at least 1.'))
+    ):
       tennis.Match(target_sets=0)
 
   def test_init_first_set(self):

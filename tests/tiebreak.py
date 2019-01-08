@@ -1,3 +1,4 @@
+import re
 import unittest
 
 import tennis
@@ -10,9 +11,9 @@ class Tiebreak(unittest.TestCase):
     self.assertEqual(tiebreak.first_returner_points, 0)
 
   def test_init_args(self):
-    with self.assertRaises(
+    with self.assertRaisesRegex(
       TypeError,
-      msg='__init__() takes 1 positional argument but 2 were given'
+      '^{}$'.format(re.escape('__init__() takes 1 positional argument but 2 were given'))
     ):
       tennis.Tiebreak(1)
 
@@ -23,20 +24,35 @@ class Tiebreak(unittest.TestCase):
     self.assertEqual(tiebreak.first_returner_points, 4)
 
   def test_init_negative_points(self):
-    with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
+    with self.assertRaisesRegex(
+      RuntimeError,
+      '^{}$'.format(re.escape('Point scores must be non-negative.'))
+    ):
       tennis.Tiebreak(first_server_points=-1, first_returner_points=0, target_points=0)
 
-    with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
+    with self.assertRaisesRegex(
+      RuntimeError,
+      '^{}$'.format(re.escape('Point scores must be non-negative.'))
+    ):
       tennis.Tiebreak(first_server_points=0, first_returner_points=-1, target_points=0)
 
-    with self.assertRaises(RuntimeError, msg='Point scores must be non-negative.'):
+    with self.assertRaisesRegex(
+      RuntimeError,
+      '^{}$'.format(re.escape('Point scores must be non-negative.'))
+    ):
       tennis.Tiebreak(first_server_points=0, first_returner_points=0, target_points=-1)
 
   def test_init_unreachable_points(self):
-    with self.assertRaises(RuntimeError, msg='Point scores must be reachable.'):
+    with self.assertRaisesRegex(
+      RuntimeError,
+      '^{}$'.format(re.escape('Point score must be reachable.'))
+    ):
       tennis.Tiebreak(first_server_points=6, first_returner_points=3, target_points=5)
 
-    with self.assertRaises(RuntimeError, msg='Point scores must be reachable.'):
+    with self.assertRaisesRegex(
+      RuntimeError,
+      '^{}$'.format(re.escape('Point score must be reachable.'))
+    ):
       tennis.Tiebreak(first_server_points=3, first_returner_points=6, target_points=5)
 
     tennis.Tiebreak(first_server_points=6, first_returner_points=4, target_points=5)
@@ -58,9 +74,11 @@ class Tiebreak(unittest.TestCase):
     self.assertFalse(tennis.Tiebreak(first_server_points=6, first_returner_points=8).winner())
 
   def test_point(self):
-    with self.assertRaises(
+    with self.assertRaisesRegex(
       RuntimeError,
-      msg='Cannot advance this tiebreak\'s score because the tiebreak is over.'
+      '^{}$'.format(re.escape(
+        'Cannot advance this tiebreak\'s score because the tiebreak is over.'
+      ))
     ):
       tennis.Tiebreak(
         first_server_points=3,
