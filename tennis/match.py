@@ -89,6 +89,17 @@ class Match:
     ])
 
   '''
+  :return: True if the first server won the match, False if the first returner won the match, and
+           None otherwise
+  '''
+  def winner(self):
+    if self.first_server_sets() == self.target_sets:
+      return True
+
+    if self.first_returner_sets() == self.target_sets:
+      return False
+
+  '''
   :return: a string representation of the match
   '''
   def __str__(self):
