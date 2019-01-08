@@ -100,6 +100,36 @@ class Match:
       return False
 
   '''
+  Advances the match's score by a point.
+
+  :param bool first_server: True if the first server won the point, and False otherwise
+  :return: True if the first server won the match, False if the first returner won the match, and
+           None otherwise
+  :raises RuntimeError: if the match's score cannot be advanced because the match is over
+  '''
+  def point(self, *, first_server):
+    if self.winner() is not None:
+      raise RuntimeError('Cannot advance this match\'s score because the match is over.')
+
+    set_winner = self.sets[-1].point(
+      first_server=list(self.first_server_served_first())[-1] == first_server
+    )
+    if set_winner is None:
+      return None
+
+    match_winner = self.winner()
+    if match_winner is not None:
+      return match_winner
+
+    self.sets.append(tennis.Set(
+      games=None,
+      target_games=self.target_games,
+      deciding_point=self.deciding_point,
+      tiebreak_games=self.tiebreak_games,
+      tiebreak_points=self.tiebreak_points
+    ))
+
+  '''
   :return: a string representation of the match
   '''
   def __str__(self):

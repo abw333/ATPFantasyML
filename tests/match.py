@@ -199,6 +199,296 @@ class Match(unittest.TestCase):
       target_sets=1
     ).winner())
 
+  def test_point(self):
+    with self.assertRaisesRegex(
+      RuntimeError,
+      '^{}$'.format(re.escape('Cannot advance this match\'s score because the match is over.'))
+    ):
+      tennis.Match(
+        sets=[tennis.Set(games=[tennis.Tiebreak(first_server_points=7)], tiebreak_games=0)],
+        target_sets=1,
+        tiebreak_games=0
+      ).point(first_server=True)
+
+    match = tennis.Match(tiebreak_games=0, tiebreak_points=2)
+    self.assertIsNone(match.point(first_server=True))
+    self.assertEqual(
+      match,
+      tennis.Match(
+        sets=[tennis.Set(
+          games=[tennis.Tiebreak(first_server_points=1, target_points=2)],
+          tiebreak_games=0,
+          tiebreak_points=2
+        )],
+        tiebreak_games=0,
+        tiebreak_points=2
+      )
+    )
+    self.assertIsNone(match.point(first_server=True))
+    self.assertEqual(
+      match,
+      tennis.Match(
+        sets=[
+          tennis.Set(
+            games=[tennis.Tiebreak(first_server_points=2, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          ),
+          tennis.Set(
+            games=[tennis.Tiebreak(target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          )
+        ],
+        tiebreak_games=0,
+        tiebreak_points=2
+      )
+    )
+    self.assertIsNone(match.point(first_server=True))
+    self.assertEqual(
+      match,
+      tennis.Match(
+        sets=[
+          tennis.Set(
+            games=[tennis.Tiebreak(first_server_points=2, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          ),
+          tennis.Set(
+            games=[tennis.Tiebreak(first_returner_points=1, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          )
+        ],
+        tiebreak_games=0,
+        tiebreak_points=2
+      )
+    )
+    self.assertTrue(match.point(first_server=True))
+    self.assertEqual(
+      match,
+      tennis.Match(
+        sets=[
+          tennis.Set(
+            games=[tennis.Tiebreak(first_server_points=2, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          ),
+          tennis.Set(
+            games=[tennis.Tiebreak(first_returner_points=2, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          )
+        ],
+        tiebreak_games=0,
+        tiebreak_points=2
+      )
+    )
+    match = tennis.Match(
+      sets=[tennis.Set(
+        games=[tennis.Tiebreak(first_server_points=1, target_points=2)],
+        tiebreak_games=0,
+        tiebreak_points=2
+      )],
+      target_sets=1,
+      tiebreak_games=0,
+      tiebreak_points=2
+    )
+    self.assertTrue(match.point(first_server=True))
+    self.assertEqual(
+      match,
+      tennis.Match(
+        sets=[tennis.Set(
+          games=[tennis.Tiebreak(first_server_points=2, target_points=2)],
+          tiebreak_games=0,
+          tiebreak_points=2
+        )],
+        target_sets=1,
+        tiebreak_games=0,
+        tiebreak_points=2
+      )
+    )
+    match = tennis.Match(
+      sets=[
+        tennis.Set(
+          games=[tennis.Tiebreak(first_returner_points=2, target_points=2)],
+          tiebreak_games=0,
+          tiebreak_points=2
+        ),
+        tennis.Set(
+          games=[tennis.Tiebreak(first_returner_points=1, target_points=2)],
+          tiebreak_games=0,
+          tiebreak_points=2
+        )
+      ],
+      tiebreak_games=0,
+      tiebreak_points=2
+    )
+    self.assertIsNone(match.point(first_server=True))
+    self.assertEqual(
+      match,
+      tennis.Match(
+        sets=[
+          tennis.Set(
+            games=[tennis.Tiebreak(first_returner_points=2, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          ),
+          tennis.Set(
+            games=[tennis.Tiebreak(first_returner_points=2, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          ),
+          tennis.Set(
+            games=[tennis.Tiebreak(target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          )
+        ],
+        tiebreak_games=0,
+        tiebreak_points=2
+      )
+    )
+    match = tennis.Match(tiebreak_games=0, tiebreak_points=2)
+    self.assertIsNone(match.point(first_server=False))
+    self.assertEqual(
+      match,
+      tennis.Match(
+        sets=[tennis.Set(
+          games=[tennis.Tiebreak(first_returner_points=1, target_points=2)],
+          tiebreak_games=0,
+          tiebreak_points=2
+        )],
+        tiebreak_games=0,
+        tiebreak_points=2
+      )
+    )
+    self.assertIsNone(match.point(first_server=False))
+    self.assertEqual(
+      match,
+      tennis.Match(
+        sets=[
+          tennis.Set(
+            games=[tennis.Tiebreak(first_returner_points=2, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          ),
+          tennis.Set(
+            games=[tennis.Tiebreak(target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          )
+        ],
+        tiebreak_games=0,
+        tiebreak_points=2
+      )
+    )
+    self.assertIsNone(match.point(first_server=False))
+    self.assertEqual(
+      match,
+      tennis.Match(
+        sets=[
+          tennis.Set(
+            games=[tennis.Tiebreak(first_returner_points=2, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          ),
+          tennis.Set(
+            games=[tennis.Tiebreak(first_server_points=1, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          )
+        ],
+        tiebreak_games=0,
+        tiebreak_points=2
+      )
+    )
+    self.assertFalse(match.point(first_server=False))
+    self.assertEqual(
+      match,
+      tennis.Match(
+        sets=[
+          tennis.Set(
+            games=[tennis.Tiebreak(first_returner_points=2, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          ),
+          tennis.Set(
+            games=[tennis.Tiebreak(first_server_points=2, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          )
+        ],
+        tiebreak_games=0,
+        tiebreak_points=2
+      )
+    )
+    match = tennis.Match(
+      sets=[tennis.Set(
+        games=[tennis.Tiebreak(first_returner_points=1, target_points=2)],
+        tiebreak_games=0,
+        tiebreak_points=2
+      )],
+      target_sets=1,
+      tiebreak_games=0,
+      tiebreak_points=2
+    )
+    self.assertFalse(match.point(first_server=False))
+    self.assertEqual(
+      match,
+      tennis.Match(
+        sets=[tennis.Set(
+          games=[tennis.Tiebreak(first_returner_points=2, target_points=2)],
+          tiebreak_games=0,
+          tiebreak_points=2
+        )],
+        target_sets=1,
+        tiebreak_games=0,
+        tiebreak_points=2
+      )
+    )
+    match = tennis.Match(
+      sets=[
+        tennis.Set(
+          games=[tennis.Tiebreak(first_server_points=2, target_points=2)],
+          tiebreak_games=0,
+          tiebreak_points=2
+        ),
+        tennis.Set(
+          games=[tennis.Tiebreak(first_server_points=1, target_points=2)],
+          tiebreak_games=0,
+          tiebreak_points=2
+        )
+      ],
+      tiebreak_games=0,
+      tiebreak_points=2
+    )
+    self.assertIsNone(match.point(first_server=False))
+    self.assertEqual(
+      match,
+      tennis.Match(
+        sets=[
+          tennis.Set(
+            games=[tennis.Tiebreak(first_server_points=2, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          ),
+          tennis.Set(
+            games=[tennis.Tiebreak(first_server_points=2, target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          ),
+          tennis.Set(
+            games=[tennis.Tiebreak(target_points=2)],
+            tiebreak_games=0,
+            tiebreak_points=2
+          )
+        ],
+        tiebreak_games=0,
+        tiebreak_points=2
+      )
+    )
+
   def test_str(self):
     self.assertEqual(
       str(tennis.Match(
