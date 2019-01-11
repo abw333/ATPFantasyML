@@ -12,6 +12,14 @@ class Match:
                              None if a tiebreak is not to be played
   :param int tiebreak_points: number of points required to win a tiebreak, or None if a tiebreak is
                               not to be played
+  :param int final_set_target_games: number of games required to win the final set
+  :param bool final_set_deciding_point: whether to play a deciding point at deuce in the final set
+  :param int final_set_tiebreak_games: number of games each player must have before a tiebreak is
+                                       played in the final set, or None if a tiebreak is not to be
+                                       played in the final set
+  :param int final_set_tiebreak_points: number of points required to win a tiebreak in the final
+                                        set, or None if a tiebreak is not to be played in the final
+                                        set
   :var sets: list of sets played in the match
   :var target_sets: number of sets required to win the match
   :var target_games: number of games required to win each set
@@ -20,6 +28,13 @@ class Match:
                        a tiebreak is not to be played
   :var tiebreak_points: number of points required to win a tiebreak, or None if a tiebreak is not to
                         be played
+  :var final_set_target_games: number of games required to win the final set
+  :var final_set_deciding_point: whether to play a deciding point at deuce in the final set
+  :var final_set_tiebreak_games: number of games each player must have before a tiebreak is played
+                                 in the final set, or None if a tiebreak is not to be played in the
+                                 final set
+  :var final_set_tiebreak_points: number of points required to win a tiebreak in the final set, or
+                                  None if a tiebreak is not to be played in the final set
   '''
   def __init__(
     self,
@@ -29,35 +44,63 @@ class Match:
     target_games=6,
     deciding_point=False,
     tiebreak_games=6,
-    tiebreak_points=7
+    tiebreak_points=7,
+    final_set_target_games=6,
+    final_set_deciding_point=False,
+    final_set_tiebreak_games=6,
+    final_set_tiebreak_points=7
   ):
     # TODO(abw333): validate sets
 
     if target_sets < 1:
       raise RuntimeError('target_sets must be at least 1.')
 
-    if target_games < 0:
+    if min(target_games, final_set_target_games) < 0:
       raise RuntimeError('Point scores must be non-negative.')
 
     if (tiebreak_games is None) != (tiebreak_points is None):
       raise RuntimeError('tiebreak_games and tiebreak_points must both be None or non-None.')
 
+    if (final_set_tiebreak_games is None) != (final_set_tiebreak_points is None):
+      raise RuntimeError(
+        'final_set_tiebreak_games and final_set_tiebreak_points must both be None or non-None.'
+      )
+
     if tiebreak_games is not None and min(tiebreak_games, tiebreak_points) < 0:
       raise RuntimeError('Point scores must be non-negative.')
 
-    self.sets = [tennis.Set(
-      games=None,
-      target_games=target_games,
-      deciding_point=deciding_point,
-      tiebreak_games=tiebreak_games,
-      tiebreak_points=tiebreak_points
-    )] if sets is None else sets
+    if final_set_tiebreak_games is not None:
+      if min(final_set_tiebreak_games, final_set_tiebreak_points) < 0:
+        raise RuntimeError('Point scores must be non-negative.')
+
+    if sets is not None:
+      self.sets = sets
+    elif target_sets == 1:
+      self.sets = [tennis.Set(
+        games=None,
+        target_games=final_set_target_games,
+        deciding_point=final_set_deciding_point,
+        tiebreak_games=final_set_tiebreak_games,
+        tiebreak_points=final_set_tiebreak_points
+      )]
+    else:
+      self.sets = [tennis.Set(
+        games=None,
+        target_games=target_games,
+        deciding_point=deciding_point,
+        tiebreak_games=tiebreak_games,
+        tiebreak_points=tiebreak_points
+      )]
 
     self.target_sets = target_sets
     self.target_games = target_games
     self.deciding_point = deciding_point
     self.tiebreak_games = tiebreak_games
     self.tiebreak_points = tiebreak_points
+    self.final_set_target_games = final_set_target_games
+    self.final_set_deciding_point = final_set_deciding_point
+    self.final_set_tiebreak_games = final_set_tiebreak_games
+    self.final_set_tiebreak_points = final_set_tiebreak_points
 
   '''
   :return: yields a boolean for each set that indicates whether the player that served first in the
@@ -121,13 +164,22 @@ class Match:
     if match_winner is not None:
       return match_winner
 
-    self.sets.append(tennis.Set(
-      games=None,
-      target_games=self.target_games,
-      deciding_point=self.deciding_point,
-      tiebreak_games=self.tiebreak_games,
-      tiebreak_points=self.tiebreak_points
-    ))
+    if len(self.sets) == 2 * (self.target_sets - 1):
+      self.sets.append(tennis.Set(
+        games=None,
+        target_games=self.final_set_target_games,
+        deciding_point=self.final_set_deciding_point,
+        tiebreak_games=self.final_set_tiebreak_games,
+        tiebreak_points=self.final_set_tiebreak_points
+      ))
+    else:
+      self.sets.append(tennis.Set(
+        games=None,
+        target_games=self.target_games,
+        deciding_point=self.deciding_point,
+        tiebreak_games=self.tiebreak_games,
+        tiebreak_points=self.tiebreak_points
+      ))
 
   '''
   :return: a string representation of the match
@@ -139,7 +191,11 @@ class Match:
       'target_games={}, '
       'deciding_point={}, '
       'tiebreak_games={}, '
-      'tiebreak_points={}'
+      'tiebreak_points={}, '
+      'final_set_target_games={}, '
+      'final_set_deciding_point={}, '
+      'final_set_tiebreak_games={}, '
+      'final_set_tiebreak_points={}'
     ')').format(
       type(self).__name__,
       self.sets,
@@ -147,7 +203,11 @@ class Match:
       self.target_games,
       self.deciding_point,
       self.tiebreak_games,
-      self.tiebreak_points
+      self.tiebreak_points,
+      self.final_set_target_games,
+      self.final_set_deciding_point,
+      self.final_set_tiebreak_games,
+      self.final_set_tiebreak_points,
     )
 
   '''
