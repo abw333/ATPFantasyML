@@ -424,6 +424,33 @@ class Set(unittest.TestCase):
       target_games=2
     ).winner())
 
+  def test_first_server_to_serve(self):
+    with self.assertRaisesRegex(
+      RuntimeError,
+      '^{}$'.format(re.escape('No server is to serve the next point because the set is over.'))
+    ):
+      tennis.Set(
+        games=[tennis.Game(server_points=4), tennis.Game(returner_points=4)],
+        target_games=2
+      ).first_server_to_serve()
+
+    self.assertTrue(
+      tennis.Set(games=[tennis.Tiebreak(first_server_points=0)]).first_server_to_serve()
+    )
+    self.assertFalse(
+      tennis.Set(games=[tennis.Tiebreak(first_server_points=1)]).first_server_to_serve()
+    )
+    self.assertFalse(
+      tennis.Set(games=[tennis.Tiebreak(first_server_points=2)]).first_server_to_serve()
+    )
+    self.assertTrue(
+      tennis.Set(games=[tennis.Tiebreak(first_server_points=3)]).first_server_to_serve()
+    )
+
+    self.assertTrue(tennis.Set(games=[tennis.Game()]).first_server_to_serve())
+    self.assertFalse(tennis.Set(games=[tennis.Game()] * 2).first_server_to_serve())
+    self.assertTrue(tennis.Set(games=[tennis.Game()] * 3).first_server_to_serve())
+
   def test_point(self):
     with self.assertRaisesRegex(
       RuntimeError,
