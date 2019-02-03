@@ -73,6 +73,57 @@ class Tiebreak(unittest.TestCase):
     self.assertFalse(tennis.Tiebreak(first_server_points=5, first_returner_points=7).winner())
     self.assertFalse(tennis.Tiebreak(first_server_points=6, first_returner_points=8).winner())
 
+  def test_first_server_to_serve(self):
+    with self.assertRaisesRegex(
+      RuntimeError,
+      '^{}$'.format(re.escape('No server is to serve the next point because the tiebreak is over.'))
+    ):
+      tennis.Tiebreak(
+        first_server_points=3,
+        first_returner_points=0,
+        target_points=3
+      ).first_server_to_serve()
+
+    self.assertTrue(
+      tennis.Tiebreak(first_server_points=0, first_returner_points=0).first_server_to_serve()
+    )
+
+    self.assertFalse(
+      tennis.Tiebreak(first_server_points=1, first_returner_points=0).first_server_to_serve()
+    )
+
+    self.assertFalse(
+      tennis.Tiebreak(first_server_points=0, first_returner_points=1).first_server_to_serve()
+    )
+
+    self.assertFalse(
+      tennis.Tiebreak(first_server_points=2, first_returner_points=0).first_server_to_serve()
+    )
+
+    self.assertFalse(
+      tennis.Tiebreak(first_server_points=1, first_returner_points=1).first_server_to_serve()
+    )
+
+    self.assertFalse(
+      tennis.Tiebreak(first_server_points=0, first_returner_points=2).first_server_to_serve()
+    )
+
+    self.assertTrue(
+      tennis.Tiebreak(first_server_points=3, first_returner_points=0).first_server_to_serve()
+    )
+
+    self.assertTrue(
+      tennis.Tiebreak(first_server_points=2, first_returner_points=1).first_server_to_serve()
+    )
+
+    self.assertTrue(
+      tennis.Tiebreak(first_server_points=1, first_returner_points=2).first_server_to_serve()
+    )
+
+    self.assertTrue(
+      tennis.Tiebreak(first_server_points=0, first_returner_points=3).first_server_to_serve()
+    )
+
   def test_point(self):
     with self.assertRaisesRegex(
       RuntimeError,
