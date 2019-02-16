@@ -143,6 +143,17 @@ class Match:
       return False
 
   '''
+  :return: True if the first server is to serve the next point, and False if the first returner
+           is to serve the next point
+  :raises RuntimeError: if no server is to serve the next point because the match is over
+  '''
+  def first_server_to_serve(self):
+    if self.winner() is not None:
+      raise RuntimeError('No server is to serve the next point because the match is over.')
+
+    return tuple(self.first_server_served_first())[-1] == self.sets[-1].first_server_to_serve()
+
+  '''
   Advances the match's score by a point.
 
   :param bool first_server: True if the first server won the point, and False otherwise
