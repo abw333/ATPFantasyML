@@ -25,11 +25,12 @@ class Game:
     self.server_points = server_points
     self.returner_points = returner_points
     self.deciding_point = deciding_point
+    self._winner = self._compute_winner()
 
   '''
   :return: True if the server won the game, False if the returner won the game, and None otherwise
   '''
-  def winner(self):
+  def _compute_winner(self):
     if self.deciding_point and self.server_points == 4:
       return True
 
@@ -41,6 +42,12 @@ class Game:
 
     if self.returner_points >= 4 and self.returner_points - self.server_points >= 2:
       return False
+
+  '''
+  :return: True if the server won the game, False if the returner won the game, and None otherwise
+  '''
+  def winner(self):
+    return self._winner
 
   '''
   Advances the game's score by a point.
@@ -57,6 +64,8 @@ class Game:
       self.server_points += 1
     else:
       self.returner_points += 1
+
+    self._winner = self._compute_winner()
 
     return self.winner()
 
