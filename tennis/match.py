@@ -129,7 +129,7 @@ class Match:
   '''
   def first_server_sets(self):
     return len([
-      0 for fssf, s in zip(self.first_server_served_first(), self.sets) if fssf == s.winner()
+      0 for fssf, s in zip(self.first_server_served_first(), self.sets) if fssf == s._winner
     ])
 
   '''
@@ -137,7 +137,7 @@ class Match:
   '''
   def first_returner_sets(self):
     return len([
-      0 for fssf, s in zip(self.first_server_served_first(), self.sets) if (not fssf) == s.winner()
+      0 for fssf, s in zip(self.first_server_served_first(), self.sets) if (not fssf) == s._winner
     ])
 
   '''
@@ -164,7 +164,7 @@ class Match:
   :raises RuntimeError: if no server is to serve the next point because the match is over
   '''
   def first_server_to_serve(self):
-    if self.winner() is not None:
+    if self._winner is not None:
       raise RuntimeError('No server is to serve the next point because the match is over.')
 
     return self._first_server_served_first[-1] == self.sets[-1].first_server_to_serve()
@@ -178,7 +178,7 @@ class Match:
   :raises RuntimeError: if the match's score cannot be advanced because the match is over
   '''
   def point(self, *, first_server):
-    if self.winner() is not None:
+    if self._winner is not None:
       raise RuntimeError('Cannot advance this match\'s score because the match is over.')
 
     set_winner = self.sets[-1].point(

@@ -57,7 +57,7 @@ class Game:
   :raises RuntimeError: if the game's score cannot be advanced because the game is over
   '''
   def point(self, *, first_server):
-    if self.winner() is not None:
+    if self._winner is not None:
       raise RuntimeError('Cannot advance this game\'s score because the game is over.')
 
     if first_server:
@@ -67,7 +67,7 @@ class Game:
 
     self._winner = self._compute_winner()
 
-    return self.winner()
+    return self._winner
 
   '''
   :return: a string representation of the game

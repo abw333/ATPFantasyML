@@ -48,7 +48,7 @@ class Tiebreak:
   :raises RuntimeError: if no server is to serve the next point because the tiebreak is over
   '''
   def first_server_to_serve(self):
-    if self.winner() is not None:
+    if self._winner is not None:
       raise RuntimeError('No server is to serve the next point because the tiebreak is over.')
 
     return (self.first_server_points + self.first_returner_points) % 4 in (0, 3)
@@ -62,7 +62,7 @@ class Tiebreak:
   :raises RuntimeError: if the tiebreak's score cannot be advanced because the tiebreak is over
   '''
   def point(self, *, first_server):
-    if self.winner() is not None:
+    if self._winner is not None:
       raise RuntimeError('Cannot advance this tiebreak\'s score because the tiebreak is over.')
 
     if first_server:
@@ -72,7 +72,7 @@ class Tiebreak:
 
     self._winner = self._compute_winner()
 
-    return self.winner()
+    return self._winner
 
   '''
   :return: a string representation of the tiebreak
