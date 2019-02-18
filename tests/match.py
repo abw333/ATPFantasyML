@@ -210,7 +210,7 @@ class Match(unittest.TestCase):
       tennis.Set(games=[tennis.Game()] * 4)
     ])
 
-    self.assertEqual(list(match.first_server_served_first()), [True, False, False, True])
+    self.assertEqual(list(match.first_server_served_first), [True, False, False, True])
 
   def test_sets(self):
     sets = []
