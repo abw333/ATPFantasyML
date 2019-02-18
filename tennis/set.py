@@ -55,6 +55,7 @@ class Set:
     self.tiebreak_games = tiebreak_games
     self.tiebreak_points = tiebreak_points
     self._winner = self._compute_winner()
+    self._first_server_to_serve = self._compute_first_server_to_serve()
 
   '''
   :return: the number of games won by the player who served first
@@ -95,6 +96,16 @@ class Set:
     return self._winner
 
   '''
+  :return: None if the set is currently in a tiebreak; otherwise, True if the first server is to
+           serve the next point, and False if the first returner is to serve the next point
+  '''
+  def _compute_first_server_to_serve(self):
+    if type(self.games[-1]) is tennis.Tiebreak:
+      return None
+
+    return bool(len(self.games) % 2)
+
+  '''
   :return: True if the first server is to serve the next point, and False if the first returner
            is to serve the next point
   :raises RuntimeError: if no server is to serve the next point because the set is over
@@ -103,10 +114,10 @@ class Set:
     if self.winner() is not None:
       raise RuntimeError('No server is to serve the next point because the set is over.')
 
-    if type(self.games[-1]) is tennis.Tiebreak:
+    if self._first_server_to_serve is None:
       return self.games[-1].first_server_to_serve()
 
-    return bool(len(self.games) % 2)
+    return self._first_server_to_serve
 
   '''
   Advances the set's score by a point.
@@ -137,12 +148,14 @@ class Set:
         first_returner_points=0,
         target_points=self.tiebreak_points
       ))
+      self._first_server_to_serve = None
     else:
       self.games.append(tennis.Game(
         server_points=0,
         returner_points=0,
         deciding_point=self.deciding_point
       ))
+      self._first_server_to_serve = not self._first_server_to_serve
 
   '''
   :return: a string representation of the set
