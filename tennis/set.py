@@ -54,6 +54,7 @@ class Set:
     self.deciding_point = deciding_point
     self.tiebreak_games = tiebreak_games
     self.tiebreak_points = tiebreak_points
+    self._winner = self._compute_winner()
 
   '''
   :return: the number of games won by the player who served first
@@ -71,7 +72,7 @@ class Set:
   :return: True if the first server won the set, False if the first returner won the set, and None
            otherwise
   '''
-  def winner(self):
+  def _compute_winner(self):
     first_server_games = self.first_server_games()
     if self.tiebreak_games is not None and first_server_games == self.tiebreak_games + 1:
       return True
@@ -85,6 +86,13 @@ class Set:
 
     if first_returner_games >= self.target_games and first_returner_games - first_server_games >= 2:
       return False
+
+  '''
+  :return: True if the first server won the set, False if the first returner won the set, and None
+           otherwise
+  '''
+  def winner(self):
+    return self._winner
 
   '''
   :return: True if the first server is to serve the next point, and False if the first returner
@@ -116,9 +124,10 @@ class Set:
     if game_winner is None:
       return None
 
-    set_winner = self.winner()
-    if set_winner is not None:
-      return set_winner
+    self._winner = self._compute_winner()
+
+    if self._winner is not None:
+      return self._winner
 
     if self.tiebreak_games is not None and \
       self.first_server_games() == self.tiebreak_games and \
