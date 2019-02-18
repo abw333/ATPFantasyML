@@ -20,12 +20,13 @@ class Tiebreak:
     self.first_server_points = first_server_points
     self.first_returner_points = first_returner_points
     self.target_points = target_points
+    self._winner = self._compute_winner()
 
   '''
   :return: True if the first server won the tiebreak, False if the first returner won the tiebreak,
            and None otherwise
   '''
-  def winner(self):
+  def _compute_winner(self):
     if self.first_server_points >= self.target_points:
       if self.first_server_points - self.first_returner_points >= 2:
         return True
@@ -33,6 +34,13 @@ class Tiebreak:
     if self.first_returner_points >= self.target_points:
       if self.first_returner_points - self.first_server_points >= 2:
         return False
+
+  '''
+  :return: True if the first server won the tiebreak, False if the first returner won the tiebreak,
+           and None otherwise
+  '''
+  def winner(self):
+    return self._winner
 
   '''
   :return: True if the first server is to serve the next point, and False if the first returner
@@ -61,6 +69,8 @@ class Tiebreak:
       self.first_server_points += 1
     else:
       self.first_returner_points += 1
+
+    self._winner = self._compute_winner()
 
     return self.winner()
 
