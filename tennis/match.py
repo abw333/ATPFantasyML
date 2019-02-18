@@ -101,6 +101,7 @@ class Match:
     self.final_set_deciding_point = final_set_deciding_point
     self.final_set_tiebreak_games = final_set_tiebreak_games
     self.final_set_tiebreak_points = final_set_tiebreak_points
+    self._winner = self._compute_winner()
 
   '''
   :return: yields a boolean for each set that indicates whether the player that served first in the
@@ -135,12 +136,19 @@ class Match:
   :return: True if the first server won the match, False if the first returner won the match, and
            None otherwise
   '''
-  def winner(self):
+  def _compute_winner(self):
     if self.first_server_sets() == self.target_sets:
       return True
 
     if self.first_returner_sets() == self.target_sets:
       return False
+
+  '''
+  :return: True if the first server won the match, False if the first returner won the match, and
+           None otherwise
+  '''
+  def winner(self):
+    return self._winner
 
   '''
   :return: True if the first server is to serve the next point, and False if the first returner
@@ -171,9 +179,10 @@ class Match:
     if set_winner is None:
       return None
 
-    match_winner = self.winner()
-    if match_winner is not None:
-      return match_winner
+    self._winner = self._compute_winner()
+
+    if self._winner is not None:
+      return self._winner
 
     if len(self.sets) == 2 * (self.target_sets - 1):
       self.sets.append(tennis.Set(
