@@ -101,13 +101,14 @@ class Match:
     self.final_set_deciding_point = final_set_deciding_point
     self.final_set_tiebreak_games = final_set_tiebreak_games
     self.final_set_tiebreak_points = final_set_tiebreak_points
+    self._first_server_served_first = tuple(self._compute_first_server_served_first())
     self._winner = self._compute_winner()
 
   '''
   :return: yields a boolean for each set that indicates whether the player that served first in the
            first set also served first in that set
   '''
-  def first_server_served_first(self):
+  def _compute_first_server_served_first(self):
     for i, zet in enumerate(self.sets):
       if not i:
         served_first = True
@@ -115,6 +116,13 @@ class Match:
         served_first = not served_first
 
       yield served_first
+
+  '''
+  :return: a tuple with a boolean for each set that indicates whether the player that served first
+           in the first set also served first in that set
+  '''
+  def first_server_served_first(self):
+    return self._first_server_served_first
 
   '''
   :return: the number of sets won by the player who served first
@@ -159,7 +167,7 @@ class Match:
     if self.winner() is not None:
       raise RuntimeError('No server is to serve the next point because the match is over.')
 
-    return tuple(self.first_server_served_first())[-1] == self.sets[-1].first_server_to_serve()
+    return self._first_server_served_first[-1] == self.sets[-1].first_server_to_serve()
 
   '''
   Advances the match's score by a point.
@@ -200,6 +208,12 @@ class Match:
         tiebreak_games=self.tiebreak_games,
         tiebreak_points=self.tiebreak_points
       ))
+
+    self._first_server_served_first = tuple(
+      list(self._first_server_served_first) + [
+        self._first_server_served_first[-1] != bool(len(self.sets[-2].games) % 2)
+      ]
+    )
 
   '''
   :return: a string representation of the match
