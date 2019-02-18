@@ -342,58 +342,58 @@ class Set(unittest.TestCase):
         [tennis.Tiebreak(first_server_points=0, first_returner_points=0, target_points=2)],
       tiebreak_games=1,
       tiebreak_points=2
-    ).winner())
+    ).winner)
 
     self.assertTrue(tennis.Set(
       games=[tennis.Tiebreak(first_server_points=2, first_returner_points=0, target_points=0)],
       tiebreak_games=0,
       tiebreak_points=0
-    ).winner())
+    ).winner)
 
     self.assertFalse(tennis.Set(
       games=[tennis.Game(server_points=4, returner_points=0)] * 4 + \
         [tennis.Tiebreak(first_server_points=0, first_returner_points=4, target_points=4)],
       tiebreak_games=2,
       tiebreak_points=4
-    ).winner())
+    ).winner)
 
     self.assertIsNone(tennis.Set(
       games=[tennis.Game(server_points=4, returner_points=0)] * 10 + [tennis.Game()],
       tiebreak_games=None,
       tiebreak_points=None
-    ).winner())
+    ).winner)
 
     self.assertIsNone(tennis.Set(
       games=[tennis.Game(server_points=4, returner_points=0)] * 11 + [tennis.Game()],
       tiebreak_games=None,
       tiebreak_points=None
-    ).winner())
+    ).winner)
 
     self.assertIsNone(tennis.Set(
       games=[tennis.Game(server_points=4, returner_points=0)] * 12 + [tennis.Game()],
       tiebreak_games=None,
       tiebreak_points=None
-    ).winner())
+    ).winner)
 
     self.assertIsNone(tennis.Set(
       games=[tennis.Game(server_points=4, returner_points=0)] * 13 + [tennis.Game()],
       tiebreak_games=None,
       tiebreak_points=None
-    ).winner())
+    ).winner)
 
     self.assertTrue(tennis.Set(
       games=[tennis.Game(server_points=4, returner_points=0)] * 13 + \
         [tennis.Game(server_points=0, returner_points=4)],
       tiebreak_games=None,
       tiebreak_points=None
-    ).winner())
+    ).winner)
 
     self.assertIsNone(tennis.Set(
       games=[tennis.Game(server_points=4, returner_points=0)] * 12 + \
         [tennis.Game(server_points=0, returner_points=4), tennis.Game()],
       tiebreak_games=None,
       tiebreak_points=None
-    ).winner())
+    ).winner)
 
     self.assertFalse(tennis.Set(
       games=[tennis.Game(server_points=4, returner_points=0)] * 12 + [
@@ -402,7 +402,7 @@ class Set(unittest.TestCase):
       ],
       tiebreak_games=None,
       tiebreak_points=None
-    ).winner())
+    ).winner)
 
     self.assertTrue(tennis.Set(
       games=[
@@ -410,7 +410,7 @@ class Set(unittest.TestCase):
         tennis.Game(server_points=0, returner_points=4)
       ],
       target_games=2
-    ).winner())
+    ).winner)
 
     self.assertFalse(tennis.Set(
       games=[
@@ -418,7 +418,7 @@ class Set(unittest.TestCase):
         tennis.Game(server_points=4, returner_points=0)
       ],
       target_games=2
-    ).winner())
+    ).winner)
 
   def test_first_server_to_serve(self):
     with self.assertRaisesRegex(

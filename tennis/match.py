@@ -35,6 +35,8 @@ class Match:
                                  final set
   :var final_set_tiebreak_points: number of points required to win a tiebreak in the final set, or
                                   None if a tiebreak is not to be played in the final set
+  :var winner: True if the first server won the match, False if the first returner won the match,
+               and None otherwise
   '''
   def __init__(
     self,
@@ -102,7 +104,7 @@ class Match:
     self.final_set_tiebreak_games = final_set_tiebreak_games
     self.final_set_tiebreak_points = final_set_tiebreak_points
     self._first_server_served_first = tuple(self._compute_first_server_served_first())
-    self._winner = self._compute_winner()
+    self.winner = self._compute_winner()
 
   '''
   :return: yields a boolean for each set that indicates whether the player that served first in the
@@ -129,7 +131,7 @@ class Match:
   '''
   def first_server_sets(self):
     return len([
-      0 for fssf, s in zip(self.first_server_served_first(), self.sets) if fssf == s._winner
+      0 for fssf, s in zip(self.first_server_served_first(), self.sets) if fssf == s.winner
     ])
 
   '''
@@ -137,7 +139,7 @@ class Match:
   '''
   def first_returner_sets(self):
     return len([
-      0 for fssf, s in zip(self.first_server_served_first(), self.sets) if (not fssf) == s._winner
+      0 for fssf, s in zip(self.first_server_served_first(), self.sets) if (not fssf) == s.winner
     ])
 
   '''
@@ -152,19 +154,12 @@ class Match:
       return False
 
   '''
-  :return: True if the first server won the match, False if the first returner won the match, and
-           None otherwise
-  '''
-  def winner(self):
-    return self._winner
-
-  '''
   :return: True if the first server is to serve the next point, and False if the first returner
            is to serve the next point
   :raises RuntimeError: if no server is to serve the next point because the match is over
   '''
   def first_server_to_serve(self):
-    if self._winner is not None:
+    if self.winner is not None:
       raise RuntimeError('No server is to serve the next point because the match is over.')
 
     return self._first_server_served_first[-1] == self.sets[-1].first_server_to_serve()
@@ -178,7 +173,7 @@ class Match:
   :raises RuntimeError: if the match's score cannot be advanced because the match is over
   '''
   def point(self, *, first_server):
-    if self._winner is not None:
+    if self.winner is not None:
       raise RuntimeError('Cannot advance this match\'s score because the match is over.')
 
     set_winner = self.sets[-1].point(
@@ -187,10 +182,10 @@ class Match:
     if set_winner is None:
       return None
 
-    self._winner = self._compute_winner()
+    self.winner = self._compute_winner()
 
-    if self._winner is not None:
-      return self._winner
+    if self.winner is not None:
+      return self.winner
 
     if len(self.sets) == 2 * (self.target_sets - 1):
       self.sets.append(tennis.Set(

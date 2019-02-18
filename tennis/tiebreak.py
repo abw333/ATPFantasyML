@@ -8,6 +8,8 @@ class Tiebreak:
   :var first_server_points: number of points scored by the player who served first
   :var first_returner_points: number of points scored by the player who returned first
   :var target_points: number of points required to win the tiebreak
+  :var winner: True if the first server won the tiebreak, False if the first returner won the
+               tiebreak, and None otherwise
   '''
   def __init__(self, *, first_server_points=0, first_returner_points=0, target_points=7):
     if min(first_server_points, first_returner_points, target_points) < 0:
@@ -20,7 +22,7 @@ class Tiebreak:
     self.first_server_points = first_server_points
     self.first_returner_points = first_returner_points
     self.target_points = target_points
-    self._winner = self._compute_winner()
+    self.winner = self._compute_winner()
 
   '''
   :return: True if the first server won the tiebreak, False if the first returner won the tiebreak,
@@ -36,19 +38,12 @@ class Tiebreak:
         return False
 
   '''
-  :return: True if the first server won the tiebreak, False if the first returner won the tiebreak,
-           and None otherwise
-  '''
-  def winner(self):
-    return self._winner
-
-  '''
   :return: True if the first server is to serve the next point, and False if the first returner
            is to serve the next point
   :raises RuntimeError: if no server is to serve the next point because the tiebreak is over
   '''
   def first_server_to_serve(self):
-    if self._winner is not None:
+    if self.winner is not None:
       raise RuntimeError('No server is to serve the next point because the tiebreak is over.')
 
     return (self.first_server_points + self.first_returner_points) % 4 in (0, 3)
@@ -62,7 +57,7 @@ class Tiebreak:
   :raises RuntimeError: if the tiebreak's score cannot be advanced because the tiebreak is over
   '''
   def point(self, *, first_server):
-    if self._winner is not None:
+    if self.winner is not None:
       raise RuntimeError('Cannot advance this tiebreak\'s score because the tiebreak is over.')
 
     if first_server:
@@ -70,9 +65,9 @@ class Tiebreak:
     else:
       self.first_returner_points += 1
 
-    self._winner = self._compute_winner()
+    self.winner = self._compute_winner()
 
-    return self._winner
+    return self.winner
 
   '''
   :return: a string representation of the tiebreak

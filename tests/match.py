@@ -268,32 +268,32 @@ class Match(unittest.TestCase):
     self.assertEqual(match.first_returner_sets(), 2)
 
   def test_winner(self):
-    self.assertIsNone(tennis.Match(sets=[]).winner())
+    self.assertIsNone(tennis.Match(sets=[]).winner)
     self.assertIsNone(tennis.Match(sets=[
       tennis.Set(games=[tennis.Tiebreak(first_server_points=7)], tiebreak_games=0)
-    ]).winner())
+    ]).winner)
     self.assertIsNone(tennis.Match(sets=[
       tennis.Set(games=[tennis.Tiebreak(first_server_points=7)], tiebreak_games=0),
       tennis.Set(games=[tennis.Tiebreak(first_server_points=7)], tiebreak_games=0)
-    ]).winner())
+    ]).winner)
     self.assertTrue(tennis.Match(sets=[
       tennis.Set(games=[tennis.Tiebreak(first_server_points=7)], tiebreak_games=0),
       tennis.Set(games=[tennis.Tiebreak(first_server_points=7)], tiebreak_games=0),
       tennis.Set(games=[tennis.Tiebreak(first_server_points=7)], tiebreak_games=0)
-    ]).winner())
+    ]).winner)
     self.assertFalse(tennis.Match(sets=[
       tennis.Set(games=[tennis.Tiebreak(first_server_points=7)], tiebreak_games=0),
       tennis.Set(games=[tennis.Tiebreak(first_server_points=7)], tiebreak_games=0),
       tennis.Set(games=[tennis.Tiebreak(first_returner_points=7)], tiebreak_games=0)
-    ]).winner())
+    ]).winner)
     self.assertTrue(tennis.Match(
       sets=[tennis.Set(games=[tennis.Tiebreak(first_server_points=7)], tiebreak_games=0)],
       target_sets=1
-    ).winner())
+    ).winner)
     self.assertFalse(tennis.Match(
       sets=[tennis.Set(games=[tennis.Tiebreak(first_returner_points=7)], tiebreak_games=0)],
       target_sets=1
-    ).winner())
+    ).winner)
 
   def test_first_server_to_serve(self):
     with self.assertRaisesRegex(

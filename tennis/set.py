@@ -18,6 +18,8 @@ class Set:
                        a tiebreak is not to be played
   :var tiebreak_points: number of points required to win the tiebreak, or None if a tiebreak is not
                         to be played
+  :var winner: True if the first server won the set, False if the first returner won the set, and
+               None otherwise
   '''
   def __init__(
     self,
@@ -54,20 +56,20 @@ class Set:
     self.deciding_point = deciding_point
     self.tiebreak_games = tiebreak_games
     self.tiebreak_points = tiebreak_points
-    self._winner = self._compute_winner()
+    self.winner = self._compute_winner()
     self._first_server_to_serve = self._compute_first_server_to_serve()
 
   '''
   :return: the number of games won by the player who served first
   '''
   def first_server_games(self):
-    return len([i for i, g in enumerate(self.games) if (i % 2 == 0) == g._winner])
+    return len([i for i, g in enumerate(self.games) if (i % 2 == 0) == g.winner])
 
   '''
   :return: the number of games won by the player who returned first
   '''
   def first_returner_games(self):
-    return len([i for i, g in enumerate(self.games) if (i % 2 == 1) == g._winner])
+    return len([i for i, g in enumerate(self.games) if (i % 2 == 1) == g.winner])
 
   '''
   :return: True if the first server won the set, False if the first returner won the set, and None
@@ -89,13 +91,6 @@ class Set:
       return False
 
   '''
-  :return: True if the first server won the set, False if the first returner won the set, and None
-           otherwise
-  '''
-  def winner(self):
-    return self._winner
-
-  '''
   :return: None if the set is currently in a tiebreak; otherwise, True if the first server is to
            serve the next point, and False if the first returner is to serve the next point
   '''
@@ -111,7 +106,7 @@ class Set:
   :raises RuntimeError: if no server is to serve the next point because the set is over
   '''
   def first_server_to_serve(self):
-    if self._winner is not None:
+    if self.winner is not None:
       raise RuntimeError('No server is to serve the next point because the set is over.')
 
     if self._first_server_to_serve is None:
@@ -128,17 +123,17 @@ class Set:
   :raises RuntimeError: if the set's score cannot be advanced because the set is over
   '''
   def point(self, *, first_server):
-    if self._winner is not None:
+    if self.winner is not None:
       raise RuntimeError('Cannot advance this set\'s score because the set is over.')
 
     game_winner = self.games[-1].point(first_server=(len(self.games) % 2 == 1) == first_server)
     if game_winner is None:
       return None
 
-    self._winner = self._compute_winner()
+    self.winner = self._compute_winner()
 
-    if self._winner is not None:
-      return self._winner
+    if self.winner is not None:
+      return self.winner
 
     if self.tiebreak_games is not None and \
       self.first_server_games() == self.tiebreak_games and \

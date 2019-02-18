@@ -61,17 +61,17 @@ class Tiebreak(unittest.TestCase):
     tennis.Tiebreak(first_server_points=2, first_returner_points=5, target_points=5)
 
   def test_winner(self):
-    self.assertIsNone(tennis.Tiebreak(first_server_points=0, first_returner_points=0).winner())
-    self.assertIsNone(tennis.Tiebreak(first_server_points=7, first_returner_points=6).winner())
-    self.assertIsNone(tennis.Tiebreak(first_server_points=6, first_returner_points=7).winner())
+    self.assertIsNone(tennis.Tiebreak(first_server_points=0, first_returner_points=0).winner)
+    self.assertIsNone(tennis.Tiebreak(first_server_points=7, first_returner_points=6).winner)
+    self.assertIsNone(tennis.Tiebreak(first_server_points=6, first_returner_points=7).winner)
 
-    self.assertTrue(tennis.Tiebreak(first_server_points=7, first_returner_points=0).winner())
-    self.assertTrue(tennis.Tiebreak(first_server_points=7, first_returner_points=5).winner())
-    self.assertTrue(tennis.Tiebreak(first_server_points=8, first_returner_points=6).winner())
+    self.assertTrue(tennis.Tiebreak(first_server_points=7, first_returner_points=0).winner)
+    self.assertTrue(tennis.Tiebreak(first_server_points=7, first_returner_points=5).winner)
+    self.assertTrue(tennis.Tiebreak(first_server_points=8, first_returner_points=6).winner)
 
-    self.assertFalse(tennis.Tiebreak(first_server_points=0, first_returner_points=7).winner())
-    self.assertFalse(tennis.Tiebreak(first_server_points=5, first_returner_points=7).winner())
-    self.assertFalse(tennis.Tiebreak(first_server_points=6, first_returner_points=8).winner())
+    self.assertFalse(tennis.Tiebreak(first_server_points=0, first_returner_points=7).winner)
+    self.assertFalse(tennis.Tiebreak(first_server_points=5, first_returner_points=7).winner)
+    self.assertFalse(tennis.Tiebreak(first_server_points=6, first_returner_points=8).winner)
 
   def test_first_server_to_serve(self):
     with self.assertRaisesRegex(

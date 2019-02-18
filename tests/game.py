@@ -76,19 +76,19 @@ class Game(unittest.TestCase):
     tennis.Game(server_points=4, returner_points=4)
 
   def test_winner(self):
-    self.assertIsNone(tennis.Game(server_points=0, returner_points=0).winner())
-    self.assertIsNone(tennis.Game(server_points=4, returner_points=3).winner())
-    self.assertIsNone(tennis.Game(server_points=3, returner_points=4).winner())
+    self.assertIsNone(tennis.Game(server_points=0, returner_points=0).winner)
+    self.assertIsNone(tennis.Game(server_points=4, returner_points=3).winner)
+    self.assertIsNone(tennis.Game(server_points=3, returner_points=4).winner)
 
-    self.assertTrue(tennis.Game(server_points=4, returner_points=0).winner())
-    self.assertTrue(tennis.Game(server_points=4, returner_points=2).winner())
-    self.assertTrue(tennis.Game(server_points=5, returner_points=3).winner())
-    self.assertTrue(tennis.Game(server_points=4, returner_points=3, deciding_point=True).winner())
+    self.assertTrue(tennis.Game(server_points=4, returner_points=0).winner)
+    self.assertTrue(tennis.Game(server_points=4, returner_points=2).winner)
+    self.assertTrue(tennis.Game(server_points=5, returner_points=3).winner)
+    self.assertTrue(tennis.Game(server_points=4, returner_points=3, deciding_point=True).winner)
 
-    self.assertFalse(tennis.Game(server_points=0, returner_points=4).winner())
-    self.assertFalse(tennis.Game(server_points=2, returner_points=4).winner())
-    self.assertFalse(tennis.Game(server_points=3, returner_points=5).winner())
-    self.assertFalse(tennis.Game(server_points=3, returner_points=4, deciding_point=True).winner())
+    self.assertFalse(tennis.Game(server_points=0, returner_points=4).winner)
+    self.assertFalse(tennis.Game(server_points=2, returner_points=4).winner)
+    self.assertFalse(tennis.Game(server_points=3, returner_points=5).winner)
+    self.assertFalse(tennis.Game(server_points=3, returner_points=4, deciding_point=True).winner)
 
   def test_point(self):
     with self.assertRaisesRegex(
